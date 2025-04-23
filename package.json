@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.4",
+    "bootstrap": "^5.3.5",
     "next": "15.3.1",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.1.4"
   }
