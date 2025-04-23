@@ -2,10 +2,11 @@
 :root {
     --primary-color: #007bff;
     --secondary-color: #303030
-    --text-color: #212529;
+    --text-color: #ffffff;
     --bg-color: #212121;
+    --bg-sidebar: #000000
   }
   body {
-    color: var(--text-color);
+    color: white !important;
     background-color: var(--primary-color);
   }
