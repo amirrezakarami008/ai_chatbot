@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.4",
-    "bootstrap-rtl": "^3.3.4",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
     "postcss": "^8.5.3",

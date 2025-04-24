@@ -10,19 +10,18 @@ export default function Home() {
   const toggleSidebar = () => setIsOpen(!isOpen);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
-  // بستن سایدبار وقتی وارد موبایل می‌شیم
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1280) {
-        setIsOpen(true); // سایدبار در حالت XL باز باشه
+        setIsOpen(true);
       } else {
-        setIsOpen(false); // سایدبار در حالت موبایل بسته باشه
+        setIsOpen(false);
       }
     };
 
     window.addEventListener('resize', handleResize);
 
-    // اجرای اولیه
+    
     handleResize();
 
     return () => window.removeEventListener('resize', handleResize);
@@ -31,9 +30,10 @@ export default function Home() {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
+      {/* md:static */}
       <div
         className={`
-          fixed md:static top-0 ${isOpen ? 'right-0' : '-right-64'} h-full w-64 bg-gray-800 text-white transition-all duration-300 z-50
+          fixed    top-0 ${isOpen ? 'right-0' : '-right-64'} h-full w-64 bg-gray-800 text-white transition-all duration-300 z-50
           md:left-0 md:right-auto md:translate-x-0
         `}
       >
@@ -68,8 +68,29 @@ export default function Home() {
           <li className="hover:bg-[var(--primary-color)] p-1 rounded cursor-pointer">تماس با ما</li>
           <li className="hover:bg-[var(--primary-color)] p-1 rounded cursor-pointer">بلاگ</li>
         </ul>
+          <div className="border-t p-4 text-lg  border-gray-700 font-bold">تاریخچه</div>
+          <div className="px-4 my-2 py-2 cursor-pointer rounded hover:bg-[var(--primary-color)] mx-3">
+            <span className="">یه عکس سگ برام بساز</span>
+          </div>
+          <div className="px-4 my-2 py-2 cursor-pointer rounded hover:bg-[var(--primary-color)] mx-3">
+            <span className="">آموزشی</span>
+          </div>
+          <div className="px-4 my-2 py-2 cursor-pointer rounded hover:bg-[var(--primary-color)] mx-3">
+            <span className="">نحوه زندکی کردن درست</span>
+          </div>
+          <div className="px-4 my-2 py-2 cursor-pointer rounded hover:bg-[var(--primary-color)] mx-3">
+            <span className="">چرا باید غذا بخوریم</span>
+          </div>
+          <div className="px-4 my-2 py-2 cursor-pointer rounded hover:bg-[var(--primary-color)] mx-3">
+            <span className="">آموزش جاوا اسکریپت</span>
+          </div>
+          <div className="px-4 my-2 py-2 cursor-pointer rounded hover:bg-[var(--primary-color)] mx-3">
+            <span className="">حقوق برنامه نویسی</span>
+          </div>
+          <div className="px-4 my-2 py-2 cursor-pointer rounded hover:bg-[var(--primary-color)] mx-3">
+            <span className="">هوش مصنوعی چیست</span>
+          </div>
       </div>
-          {/* <div className="border-b border-gray-700">تاریخچه</div> */}
       {/* Main Content */}
         <div className="flex-1  bg-gray-900 text-center h-full">
           <div className="md:hidden p-4 shadow flex justify-between items-center">
@@ -79,7 +100,7 @@ export default function Home() {
           </div>
 
           <div className="mt-[100px] md:mt-[250px]">
-            <h1 className="text-2xl font-bold mb-4">در چه زمینه ای می توانم کمک کنم؟</h1>
+            <h1 className="text-2xl font-bold mb-4">در چه <span className="text-[var(--primary-color)]">زمینه</span> ای می توانم <span className="text-[var(--primary-color)]">کمک</span> کنم؟</h1>
             <div className="min-h-screen bg-gray-900 flex items-center justify-center">
             <ChatInput />
           </div>
