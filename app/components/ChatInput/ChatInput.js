@@ -6,11 +6,12 @@ import { IoSend } from "react-icons/io5";
 import { AiOutlinePlus } from "react-icons/ai";
 export default function ChatInput() {
   const [input, setInput] = useState("");
-
+  const [messages, setMessages] = useState([]);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (input.trim()) {
-      console.log("پیام ارسال شد:", input);
+      // console.log("پیام ارسال شد:", input);
+      // setMessages((prevMessages) => [...prevMessages, input]);
       setInput("");
     }
   };
