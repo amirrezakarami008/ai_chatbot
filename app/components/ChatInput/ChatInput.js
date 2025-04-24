@@ -16,7 +16,7 @@ export default function ChatInput() {
   };
 
   return (
-    <div className="fixed bottom-4 w-full max-w-3xl mx-auto px-4">
+    <div className="fixed bottom-4 lg:w-full max-w-3xl mx-auto px-4">
       <form
         onSubmit={handleSubmit}
         className="flex items-center bg-gray-800 text-white rounded-xl p-3 shadow-lg border border-gray-700"
@@ -30,20 +30,20 @@ export default function ChatInput() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="بابا کرم چطور میتونه به شما کمک کنه؟"
+          placeholder="بابا کرم چطور به شما کمک کنه؟"
           className="flex-1 bg-transparent outline-none text-gray-200 placeholder-gray-400 text-right"
           dir="rtl"
         />
-        <div className="flex items-center space-x-2 space-x-reverse mx-2">
+        <div className="flex items-center  space-x-reverse mx-2">
           <button
             type="button"
-            className="text-gray-300 cursor-pointer hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg"
+            className="me-2 text-gray-300 cursor-pointer hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg"
           >
             <FaMicrophone className="w-5 h-5" />
           </button>
           <button
             type="button"
-            className="text-gray-300 ms-2 cursor-pointer hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg"
+            className="text-gray-300 cursor-pointer hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg"
           >
             <AiOutlinePlus className="w-5 h-5" />
           </button>

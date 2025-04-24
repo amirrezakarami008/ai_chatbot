@@ -28,7 +28,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       {/* Sidebar */}
       {/* md:static */}
       <div
@@ -101,7 +101,7 @@ export default function Home() {
 
           <div className="mt-[100px] md:mt-[250px]">
             <h1 className="text-2xl font-bold mb-4">در چه <span className="text-[var(--primary-color)]">زمینه</span> ای می توانم <span className="text-[var(--primary-color)]">کمک</span> کنم؟</h1>
-            <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+            <div className=" bg-gray-900 flex items-center justify-center">
             <ChatInput />
           </div>
           </div>
