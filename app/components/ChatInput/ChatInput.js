@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
 import { AiOutlinePlus } from "react-icons/ai";
-
 export default function ChatInput({ onButtonClick, input, setInput, messages, setMessages }) {
   const inputRef = useRef(null);
 
