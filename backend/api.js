@@ -44,12 +44,19 @@ export async function signin(email, password) {
         password: password
     });
 }
-
-export async function chat(model, message) {
-    return baseRequest('chat', {
+export async function chat(model, message, conversation_id = null) {
+    const payload = {
         model: model,
-        message: message
-    });
+        message: message,
+    };
+
+    // فقط اگر conversation_id مقدار معتبر دارد، به payload اضافه شود
+    if (conversation_id !== null && conversation_id !== undefined) {
+        payload.conversation_id = conversation_id;
+    }
+
+    console.log('Payload ارسالی به baseRequest:', payload); // لاگ برای دیباگ
+    return baseRequest('chat', payload);
 }
 
 export async function get_conversations(limit=20, page=1) {

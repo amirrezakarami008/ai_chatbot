@@ -8,19 +8,14 @@ import { chat } from '../../../backend/api.js';
 export default function ChatInput({ onButtonClick, chats, setChats, input, setInput }) {
   const inputRef = useRef(null);
   const [error, setError] = useState(null);
+  const [conversationId, setConversationId] = useState(null); // مدیریت conversation_id با state
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-
-
-
-
-  // requset api
-  let conversation_id = null
+  // درخواست به API
   const handleSend = async () => {
-
     if (!input.trim()) return;
 
     const userMessage = { sender: 'user', text: input };
@@ -29,15 +24,20 @@ export default function ChatInput({ onButtonClick, chats, setChats, input, setIn
     setError(null);
 
     try {
-      const response = await chat(1, input , conversation_id); // فراخوانی API
-      // باید conversation_id رو اضافه کنم تا چت جدید نسازه
-      conversation_id = response.message.conversation_id
-      console.log(conversation_id);
-      
+      console.log('ارسال درخواست به API با ورودی:', { input, conversationId }); // لاگ برای دیباگ
+      const response = await chat(1, input, conversationId); // فراخوانی API
       console.log('پاسخ API:', response); // لاگ پاسخ برای دیباگ
 
       // بررسی ساختار پاسخ API
       const aiText = response?.message?.text || 'پاسخ دریافت نشد';
+      const newConversationId = response?.message?.conversation_id;
+
+      if (newConversationId) {
+        setConversationId(newConversationId); // ذخیره conversation_id برای درخواست‌های بعدی
+        console.log('Conversation ID جدید:', newConversationId);
+      } else {
+        console.warn('Conversation ID در پاسخ API یافت نشد.');
+      }
 
       const aiMessage = { sender: 'ai', text: aiText };
       setChats((prev) => [...prev, aiMessage]);
@@ -48,14 +48,6 @@ export default function ChatInput({ onButtonClick, chats, setChats, input, setIn
       setChats((prev) => [...prev, errorMessage]);
     }
   };
-
-
-
-
-
-
-
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
