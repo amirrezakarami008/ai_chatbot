@@ -1,25 +1,39 @@
 'use client';
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X, ChevronDown, ChevronUp, UsersRound, Headset, MessageSquareText , History, UserRound} from "lucide-react";
+import { Menu, X, ChevronDown, ChevronUp, Blocks, UsersRound, MessageSquareText , Headset , History, UserRound} from "lucide-react";
 import ChatInput from "./components/ChatInput/ChatInput";
-
+import { chat, get_conversations, get_messages, signup , signin } from '../backend/api.js';
+import { encryption } from '../backend/encryption.js';
+import { useRouter } from "next/navigation"; 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
   const [showDiv, setShowDiv] = useState(false);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
-
+  const [token, setToken] = useState(null);
+  const [name, setName] = useState(null);
+  // const [text , setText] = useState([])
+  const [chats, setChats] = useState([]);
+  const router = useRouter();
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-
   useEffect(() => {
     scrollToBottom();
-  }, [messages]); // هر بار پیام جدید اومد، اسکرول کن پایین
+    const storedToken = localStorage.getItem("token");
+    const storedName = localStorage.getItem("name");
+    if (!storedToken) {
+      router.push("/login");
+    }else{
+      setToken(storedToken);
+      setName(storedName);
+      encryption.token = storedToken;
+    }
+  }, [chats , router]); // هر بار پیام جدید اومد، اسکرول کن پایین
 
 
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -50,7 +64,7 @@ export default function Home() {
             <span className="text-lg">گفتگو با هوش مصنوعی</span>
             <div className="flex items-center gap-x-1">
               <UserRound className="bg-gray-200 rounded-full" size="30px" color="#000000" />
-              <span>نام مستعار کاربر</span>
+              <span>{name}</span>
             </div>
           </div>
           <div>
@@ -102,15 +116,18 @@ export default function Home() {
             تماس با ما
           </li>
           <li className="hover:bg-[var(--primary-color)] p-1 flex gap-x-1 items-center rounded cursor-pointer">
-            <span><MessageSquareText /></span>
-            بلاگ
+            <span><Blocks /></span>
+            شرایط استفاده
           </li>
           <Link href="/login">
             <li className="hover:bg-[var(--primary-color)] p-1 flex gap-x-1 items-center rounded cursor-pointer">
-              <div className="flex items-center gap-x-1">
+              <button className="flex cursor-pointer items-center gap-x-1" onClick={() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('name');
+              }}>
                 <span><UserRound /></span>
-                حساب کاربری
-              </div>
+                {token == "" ? "حساب کاربری" : "خروج"}
+              </button>
             </li>
           </Link>
         </ul>
@@ -147,18 +164,17 @@ export default function Home() {
               در چه <span className="text-[var(--primary-color)]">زمینه</span> ای می توانم{" "}
               <span className="text-[var(--primary-color)]">کمک</span> کنم؟
             </h1>
-            <div className="space-y-4 mt-6">
-              {messages.map((msg, i) => (
-                <div key={i} className="text-white max-w-[500px] bg-gray-800 p-4 rounded-2xl text-right">
-                  {msg}
+            <div className="chat-container">
+              {chats.map((chat, index) => (
+                <div key={index} className={`message ${chat.sender === 'user' ? 'user-message' : 'ai-message'}`}>
+                  {chat.text}
                 </div>
               ))}
-               <div ref={messagesEndRef} />
             </div>
           </div>
         </div>
         <div className="overflow-y-auto pb-24">
-        <ChatInput onButtonClick={() => setShowDiv(true)} input={input} setInput={setInput} messages={messages} setMessages={setMessages}/>
+        <ChatInput onButtonClick={() => setShowDiv(true)} chats={chats} setChats={setChats}  input={input} setInput={setInput}/>
         </div>
       </div>
     </div>

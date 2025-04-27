@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@noble/curves": "^1.9.0",
+    "@panva/hkdf": "^1.2.1",
     "@tailwindcss/postcss": "^4.1.4",
+    "axios": "^1.9.0",
     "lucide-react": "^0.503.0",
     "next": "15.3.1",
     "postcss": "^8.5.3",
