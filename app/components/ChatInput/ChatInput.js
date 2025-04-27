@@ -1,48 +1,69 @@
-"use client";
+'use client';
+import { useEffect, useRef, useState } from 'react';
+import { FaMicrophone } from 'react-icons/fa';
+import { IoSend } from 'react-icons/io5';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { chat } from '../../../backend/api.js';
 
-import { useEffect, useRef , useState } from "react";
-import { FaMicrophone } from "react-icons/fa";
-import { IoSend } from "react-icons/io5";
-import { AiOutlinePlus } from "react-icons/ai";
-import { chat, get_conversations, get_messages, signup } from '../../../backend/api.js';
-
-export default function ChatInput({ onButtonClick, chats , setChats , input, setInput, messages, setMessages }) {
+export default function ChatInput({ onButtonClick, chats, setChats, input, setInput }) {
   const inputRef = useRef(null);
-  const [isClient, setIsClient] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setIsClient(true);
     inputRef.current?.focus();
   }, []);
 
-  if (!isClient) return null; // هیچ چیزی قبل از لود کامل کلاینت رندر نکن
+
+
+
+
+  // requset api
+  let conversation_id = null
+  const handleSend = async () => {
+
+    if (!input.trim()) return;
+
+    const userMessage = { sender: 'user', text: input };
+    setChats((prev) => [...prev, userMessage]); // اضافه کردن پیام کاربر به chats
+    setInput('');
+    setError(null);
+
+    try {
+      const response = await chat(1, input , conversation_id); // فراخوانی API
+      // باید conversation_id رو اضافه کنم تا چت جدید نسازه
+      conversation_id = response.message.conversation_id
+      console.log(conversation_id);
+      
+      console.log('پاسخ API:', response); // لاگ پاسخ برای دیباگ
+
+      // بررسی ساختار پاسخ API
+      const aiText = response?.message?.text || 'پاسخ دریافت نشد';
+
+      const aiMessage = { sender: 'ai', text: aiText };
+      setChats((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('خطا در دریافت پاسخ:', error);
+      setError('خطا در ارتباط با هوش مصنوعی. لطفاً دوباره تلاش کنید.');
+      const errorMessage = { sender: 'ai', text: 'خطا در دریافت پاسخ از هوش مصنوعی' };
+      setChats((prev) => [...prev, errorMessage]);
+    }
+  };
+
+
+
+
+
+
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (input.trim()) {
-      console.log("پیام ارسال شد:", input);
-      setMessages([...messages, input]);
-      setInput("");
-    }
-  };
-  const handleSend = async () => {
-    if (!input.trim()) return;
-    
-    const userMessage = { sender: 'user', text: input };
-    
-    try {
-      const response = await chat(1 , input);
-      const aiMessage = { sender: 'ai', text: response.text };
-      
-      setChats(prev => [...prev, userMessage, aiMessage]);
-      setInput("");
-    } catch (error) {
-      console.error("خطا در دریافت پاسخ:", error);
-    }
+    handleSend();
   };
 
   const handleClick = () => {
-    onButtonClick("");
+    onButtonClick();
     handleSend();
   };
 
@@ -53,7 +74,11 @@ export default function ChatInput({ onButtonClick, chats , setChats , input, set
         className="flex items-center bg-gray-800 text-white rounded-xl p-3 shadow-lg border border-gray-700 max-w-3xl mx-auto"
       >
         <div className="flex items-center space-x-3 me-3 space-x-reverse">
-          <button onClick={handleClick} type="submit" className="text-gray-300 hover:text-white">
+          <button
+            type="submit"
+            className="text-gray-300 hover:text-white"
+            onClick={handleClick}
+          >
             <IoSend className="w-5 h-5 hover:text-[var(--primary-color)]" />
           </button>
         </div>
@@ -62,7 +87,7 @@ export default function ChatInput({ onButtonClick, chats , setChats , input, set
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder=" کرم چطور به شما کمک کنه؟"
+          placeholder="کرم چطور به شما کمک کنه؟"
           className="flex-1 bg-transparent outline-none text-gray-200 placeholder-gray-400 text-right"
           dir="rtl"
         />
@@ -81,6 +106,9 @@ export default function ChatInput({ onButtonClick, chats , setChats , input, set
           </button>
         </div>
       </form>
+      {error && (
+        <div className="text-red-500 text-sm mt-2 text-center">{error}</div>
+      )}
     </div>
   );
 }
