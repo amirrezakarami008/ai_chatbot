@@ -1,12 +1,29 @@
 @import "tailwindcss";
 :root {
-    --primary-color: #007bff;
-    --secondary-color: #303030;
-    --text-color: #ffffff;
-    --bg-color: #212121;
-    --bg-sidebar: #le2939;
-  }
-  body {
-    color: white !important;
-    background-color: var(--primary-color);
-  }
+  --primary-color: #007bff;
+  --secondary-color: #303030;
+  --text-color: #ffffff;
+  --bg-color: #212121;
+  --bg-sidebar: #le2939;
+}
+body {
+  color: white !important;
+  background-color: var(--primary-color);
+  font-family: "vazir";
+}
+@font-face {
+  font-family: "vazir";
+  src: url("../public/fonts/Vazirmatn-VariableFont_wght.ttf");
+}
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: #007bff;
+}
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #007bdd;
+}
