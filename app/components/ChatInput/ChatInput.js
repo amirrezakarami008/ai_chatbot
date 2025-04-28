@@ -66,6 +66,8 @@ export default function ChatInput({ onButtonClick, chats, setChats, input, setIn
         className="flex items-center bg-gray-800 text-white rounded-xl p-3 shadow-lg border border-gray-700 max-w-3xl mx-auto relative"
       >
         <div className="flex items-center space-x-3 me-3 space-x-reverse">
+          <button title="ارسال" onClick={handleClick} type="submit" className="cursor-pointer text-gray-300 hover:text-white">
+            <IoSend className="w-5 h-5 text-[var(--primary-color)]" />
           <button
             type="submit"
             className={`text-gray-300 hover:text-white ${isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -77,9 +79,12 @@ export default function ChatInput({ onButtonClick, chats, setChats, input, setIn
         </div>
         <input
           ref={inputRef}
+          title="هر چه دل تنگت میخواهد از هوشیار بپرس :)"
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          placeholder="هر چه دل تنگت میخواهد از هوشیار بپرس :)"
+          className="flex-1 bg-transparent outline-none text-gray-200 placeholder-gray-400 text-right"
           placeholder="کرم چطور به شما کمک کنه؟"
           className={`flex-1 bg-transparent outline-none text-gray-200 placeholder-gray-400 text-right ${isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           dir="rtl"
@@ -88,6 +93,8 @@ export default function ChatInput({ onButtonClick, chats, setChats, input, setIn
         <div className="flex items-center space-x-reverse mx-2">
           <button
             type="button"
+            title="دستیار صوتی"
+            className="me-2 text-gray-300 border cursor-pointer border-[var(--primary-color)] bg-gray-700 p-2 rounded-lg"
             className={`me-2 text-gray-300 hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg ${isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={isTyping || isLoading}
           >
@@ -95,6 +102,8 @@ export default function ChatInput({ onButtonClick, chats, setChats, input, setIn
           </button>
           <button
             type="button"
+            title="بارگذاری فایل"
+            className="text-gray-300 border cursor-pointer border-[var(--primary-color)] bg-gray-700 p-2 rounded-lg"
             className={`text-gray-300 hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg ${isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={isTyping || isLoading}
           >

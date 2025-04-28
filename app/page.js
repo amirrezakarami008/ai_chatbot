@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { Menu, X, ChevronDown, ChevronUp, Blocks, UsersRound, MessageSquareText , Headset , LogOut , History, UserRound} from "lucide-react";
 import { Menu, X, ChevronDown, ChevronUp, Blocks, UsersRound, MessageSquareText, Headset, History, UserRound } from "lucide-react";
 import ChatInput from "./components/ChatInput/ChatInput";
 import { chat, get_conversations, get_messages, signup, signin } from '../backend/api.js';
@@ -92,8 +93,8 @@ export default function Home() {
           <div className="flex flex-col gap-y-2 items-start">
             <span className="text-lg">گفتگو با هوش مصنوعی</span>
             <div className="flex items-center gap-x-1">
-              <UserRound className="bg-gray-200 rounded-full" size="30px" color="#000000" />
-              <span>{name}</span>
+              <UserRound className="border-2 border-[var(--primary-color)] rounded-full" size="35px" color="#dddddd" />
+              <span className="text-lg">{name}</span>
             </div>
           </div>
           <button className="md:hidden text-white text-lg" onClick={toggleSidebar}>
@@ -136,6 +137,16 @@ export default function Home() {
               </li>
             </ul>
           )}
+          <Link href="/aboutUs">
+            <li className="hover:bg-[var(--primary-color)] py-2 px-1 rounded cursor-pointer">
+              <button className="flex cursor-pointer items-center gap-x-1">
+                <span><UsersRound /></span>
+                  درباره ما
+              </button>
+            </li>
+          </Link>
+          <Link href="/TermsOfUse">
+            <li className="hover:bg-[var(--primary-color)] py-2 px-1 flex gap-x-1 items-center rounded cursor-pointer">
           <li className="hover:bg-[var(--primary-color)] p-1 flex gap-x-1 items-center rounded cursor-pointer">
             <span><UsersRound /></span>
             درباره ما
@@ -148,7 +159,15 @@ export default function Home() {
             <span><Blocks /></span>
             شرایط استفاده
           </li>
+          </Link>
           <Link href="/login">
+            <li className="hover:bg-[var(--primary-color)] py-2 px-1 flex gap-x-1 items-center rounded cursor-pointer">
+              <button className="flex cursor-pointer items-center gap-x-1" onClick={() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('name');
+              }}>
+                {token == "" ? <span><UserRound /></span> : <span><LogOut /></span>}
+                {token == "" ? "حساب کاربری" : "خروج"}
             <li className="hover:bg-[var(--primary-color)] p-1 flex gap-x-1 items-center rounded cursor-pointer">
               <button
                 className="flex cursor-pointer items-center gap-x-1"
