@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
-import 'highlight.js/styles/github.css'; // استایل برای syntax highlighting
+import 'highlight.js/styles/github.css';
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +19,9 @@ export default function Home() {
   const [chats, setChats] = useState([]);
   const [token, setToken] = useState(null);
   const [name, setName] = useState(null);
+  const [typingText, setTypingText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const router = useRouter();
 
@@ -39,6 +42,30 @@ export default function Home() {
     }
   }, [chats, router]);
 
+  const typeWriter = (text, onComplete) => {
+    let index = 0;
+    setIsTyping(true);
+    setTypingText("");
+
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        setTypingText((prev) => prev + text[index]);
+        index++;
+      } else {
+        clearInterval(interval);
+        setIsTyping(false);
+        onComplete(text);
+      }
+    }, 12); // سرعت تایپ 12ms برای هر کاراکتر
+  };
+
+  const addAIMessage = (text) => {
+    setChats((prev) => {
+      const updatedChats = prev.filter((chat) => chat.sender !== "ai-typing");
+      return [...updatedChats, { sender: "ai", text }];
+    });
+  };
+
   const toggleSidebar = () => setIsOpen(!isOpen);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
@@ -58,7 +85,6 @@ export default function Home() {
 
   return (
     <div className="flex">
-      {/* Sidebar */}
       <div
         className={`fixed top-0 ${isOpen ? 'right-0' : '-right-64'} sidebar h-full overflow-y-auto w-64 bg-gray-800 text-white transition-all duration-300 z-50 md:left-0 md:right-auto md:translate-x-0`}
       >
@@ -157,7 +183,6 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 max-w-[1200px] m-auto text-center min-h-screen flex flex-col justify-between">
         <div>
           <div className="md:hidden p-4 shadow flex justify-between items-center">
@@ -171,37 +196,36 @@ export default function Home() {
               <span className="text-[var(--primary-color)]">کمک</span> کنم؟
             </h1>
             <div className="chat-container overflow-y-auto p-[10px]">
-              {chats.map((chat, index) => (
+              {chats.concat(isTyping ? [{ sender: "ai-typing", text: typingText + (isTyping ? '|' : '') }] : []).map((chat, index) => (
                 <div
                   key={index}
                   className={`message m-[10px] p-[10px] max-w-[70%] rounded-lg ${
                     chat.sender === 'user'
-                      ? 'user-message bg-[#007bff]  text-white ml-auto text-right'
+                      ? 'user-message bg-[#007bff] text-white ml-auto text-right'
                       : 'ai-message bg-gray-800 my-5 text-base/8 px-4 text-right text-white'
                   }`}
                   style={{ display: 'block', width: 'fit-content' }}
                 >
                   <ReactMarkdown
-  style={{ backgroundColor: '#1a1a1a' }}
-  rehypePlugins={[rehypeRaw, rehypeHighlight]}
-  components={{
-    code({ node, inline, className, children, ...props }) {
-      return inline ? (
-        <code className={className} {...props}>
-          {children}
-        </code>
-      ) : (
-        <pre className="text-white p-4 rounded-lg my-5" style={{ backgroundColor: '#202020'  , color : 'white' , textAlign : 'left'}}>
-          <code className={className} {...props}>
-            {children}
-          </code>
-        </pre>
-      );
-    },
-  }}
->
-  {chat.text}
-</ReactMarkdown>
+                    rehypePlugins={[rehypeRaw, rehypeHighlight]}
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        return inline ? (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        ) : (
+                          <pre className="text-white p-4 rounded-lg my-5" style={{ backgroundColor: '#202020', color: 'white', textAlign: 'left' }}>
+                            <code className={className} {...props}>
+                              {children}
+                            </code>
+                          </pre>
+                        );
+                      },
+                    }}
+                  >
+                    {chat.text}
+                  </ReactMarkdown>
                 </div>
               ))}
               <div ref={messagesEndRef} />
@@ -215,8 +239,24 @@ export default function Home() {
             setChats={setChats}
             input={input}
             setInput={setInput}
+            typeWriter={typeWriter}
+            isTyping={isTyping}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
           />
         </div>
+        <style jsx>{`
+          .ai-message::after {
+            content: '|';
+            animation: blink 0.7s step-end infinite;
+            display: ${isTyping ? 'inline' : 'none'};
+          }
+          @keyframes blink {
+            50% {
+              opacity: 0;
+            }
+          }
+        `}</style>
       </div>
     </div>
   );
