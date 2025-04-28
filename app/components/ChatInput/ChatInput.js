@@ -66,17 +66,16 @@ export default function ChatInput({ onButtonClick, chats, setChats, input, setIn
         className="flex items-center bg-gray-800 text-white rounded-xl p-3 shadow-lg border border-gray-700 max-w-3xl mx-auto relative"
       >
         <div className="flex items-center space-x-3 me-3 space-x-reverse">
-          <button title="ارسال" onClick={handleClick} type="submit" className="cursor-pointer text-gray-300 hover:text-white">
-            <IoSend className="w-5 h-5 text-[var(--primary-color)]" />
-          <button
-            type="submit"
-            className={`text-gray-300 hover:text-white ${isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={handleClick}
-            disabled={isTyping || isLoading}
-          >
-            <IoSend className="w-5 h-5 hover:text-[var(--primary-color)]" />
-          </button>
-        </div>
+  <button
+    type="submit"
+    title="ارسال"
+    className={`text-gray-300 hover:text-white ${isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+    onClick={handleClick}
+    disabled={isTyping || isLoading}
+  >
+    <IoSend className="w-5 h-5 hover:text-[var(--primary-color)]" />
+  </button>
+</div>
         <input
           ref={inputRef}
           title="هر چه دل تنگت میخواهد از هوشیار بپرس :)"
