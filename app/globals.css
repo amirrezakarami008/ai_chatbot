@@ -27,3 +27,7 @@ body {
 .sidebar::-webkit-scrollbar-thumb:hover {
   background: #007bdd;
 }
+.hljs{
+  background-color: transparent !important;
+  color: white !important;
+}

@@ -6,6 +6,10 @@ import ChatInput from "./components/ChatInput/ChatInput";
 import { chat, get_conversations, get_messages, signup, signin } from '../backend/api.js';
 import { encryption } from '../backend/encryption.js';
 import { useRouter } from "next/navigation";
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import rehypeHighlight from 'rehype-highlight';
+import 'highlight.js/styles/github.css'; // استایل برای syntax highlighting
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -166,15 +170,39 @@ export default function Home() {
               در چه <span className="text-[var(--primary-color)]">زمینه</span> ای می‌توانم{" "}
               <span className="text-[var(--primary-color)]">کمک</span> کنم؟
             </h1>
-            <div className="chat-container max-w-[500px] overflow-y-auto p-[10px] ">
+            <div className="chat-container overflow-y-auto p-[10px]">
               {chats.map((chat, index) => (
-               <div
-               key={index}
-               className={`message m-[10px] p-[10px] max-w-[70%] rounded-lg ${chat.sender === 'user' ? 'user-message bg-[#007bff] text-white ml-auto text-right' : `ai-message bg-[#f1f1f1] my-5  text-right text-black`}`}
-               style={{ display: 'block', width: 'fit-content' }}
-             >
-               {chat.text}
-             </div>
+                <div
+                  key={index}
+                  className={`message m-[10px] p-[10px] max-w-[70%] rounded-lg ${
+                    chat.sender === 'user'
+                      ? 'user-message bg-[#007bff]  text-white ml-auto text-right'
+                      : 'ai-message bg-gray-800 my-5 text-base/8 px-4 text-right text-white'
+                  }`}
+                  style={{ display: 'block', width: 'fit-content' }}
+                >
+                  <ReactMarkdown
+  style={{ backgroundColor: '#1a1a1a' }}
+  rehypePlugins={[rehypeRaw, rehypeHighlight]}
+  components={{
+    code({ node, inline, className, children, ...props }) {
+      return inline ? (
+        <code className={className} {...props}>
+          {children}
+        </code>
+      ) : (
+        <pre className="text-white p-4 rounded-lg my-5" style={{ backgroundColor: '#202020'  , color : 'white' , textAlign : 'left'}}>
+          <code className={className} {...props}>
+            {children}
+          </code>
+        </pre>
+      );
+    },
+  }}
+>
+  {chat.text}
+</ReactMarkdown>
+                </div>
               ))}
               <div ref={messagesEndRef} />
             </div>
