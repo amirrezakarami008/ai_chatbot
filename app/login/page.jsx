@@ -27,7 +27,12 @@ export default function Login() {
     }
     try {
       const response = await (isLogin ? signin(email , password) : signup(name , email , password)) 
+      // const response = await fetch('https://jsonplaceholder.typicode.com/posts')
+      // const data = await response.json()
+      // console.log('دریافت داده‌ها:', data);
+      
       console.log('پاسخ سرور:', response);
+      alert('درخواست ارسال شد')
       if (response.token !== "") {
         setToken(response.token);
         localStorage.setItem("token", response.token); // 🔥 توکن رو ذخیره کن
