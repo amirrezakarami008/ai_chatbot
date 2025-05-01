@@ -3,19 +3,22 @@ import { useState } from "react";
 import Link from "next/link";
 import { BotMessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation"; 
-import { chat, get_conversations, get_messages, signup , signin } from '../../backend/api.js';
+import { chat, get_conversations, get_messages, signup, signin } from '../../backend/api.js';
+
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassWord] = useState("");
-  const [token , setToken] = useState("");
-  const [nameInBk , setNameInBk] = useState("");
+  const [token, setToken] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
   function isValidEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   }
+
   const login = async () => {
     if (!isValidEmail(email)) {
       alert("ایمیل معتبر نیست ❌");
@@ -25,28 +28,33 @@ export default function Login() {
       alert("رمز عبور باید حداقل ۸ کاراکتر باشد ❗");
       return;
     }
+
+    setIsLoading(true);
     try {
-      const response = await (isLogin ? signin(email , password) : signup(name , email , password)) 
-      // const response = await fetch('https://jsonplaceholder.typicode.com/posts')
-      // const data = await response.json()
-      // console.log('دریافت داده‌ها:', data);
-      
+      const response = await (isLogin ? signin(email, password) : signup(name, email, password));
       console.log('پاسخ سرور:', response);
-      alert('درخواست ارسال شد')
+      alert('درخواست ارسال شد');
       if (response.token !== "") {
         setToken(response.token);
-        localStorage.setItem("token", response.token); // 🔥 توکن رو ذخیره کن
-        localStorage.setItem("name", response.user.name); // 🔥 توکن رو ذخیره کن
-        router.push("/"); // برو به صفحه اصلی
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("name", response.user.name);
+        router.push("/");
       } else {
         console.log("user pass doros ni");
       }
     } catch (error) {
       if (error.message === "USER_EXIST") {
         alert("ایمیل شما قبلا ثبت نام شده است، لطفا وارد شوید.");
+      } else if (error.message === "INVALID_CREDENTIALS") {
+        alert("رمز عبور یا ایمیل اشتباه است ❌");
+      } else {
+        alert("خطایی رخ داد، لطفا دوباره تلاش کنید.");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-[var(--secondary-color)]">
       <div className="p-8 rounded-2xl shadow-2xl bg-[var(--secondary-color)] border border-[var(--primary-color)] w-full max-w-md">
@@ -80,9 +88,36 @@ export default function Login() {
           <button
             type="button"
             onClick={login}
-            className="bg-[var(--primary-color)] text-white rounded-lg p-3 cursor-pointer hover:bg-[var(--primary-color)] transition-all"
+            disabled={isLoading}
+            className="bg-[var(--primary-color)] text-white rounded-lg p-3 cursor-pointer hover:bg-[var(--primary-color)] transition-all flex items-center justify-center gap-2"
           >
-            {isLogin ? "ورود" : "ثبت نام"}
+            {isLoading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                {isLogin ? "در حال ورود..." : "در حال ثبت نام..."}
+              </>
+            ) : (
+              <>{isLogin ? "ورود" : "ثبت نام"}</>
+            )}
           </button>
         </form>
 
