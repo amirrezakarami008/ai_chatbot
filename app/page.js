@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from "react";
+import "./globals.css"
 import Link from "next/link";
 import { Menu, X, ChevronDown, ChevronUp, Blocks, UsersRound, MessageSquareText , Headset , LogOut , History, UserRound} from "lucide-react";
 import ChatInput from "./components/ChatInput/ChatInput";
@@ -10,7 +11,9 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css';
-
+import NavbarFix from "./components/NavbarFix/NavbarFix";
+import Image from 'next/image'
+import logo from "../public/images/logo.png"
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -85,29 +88,30 @@ export default function Home() {
 
   return (
     <div className="flex">
+      {/* navbar fixed */}
+      <div className="navbar-fix z-50">
+        <NavbarFix name={name} setName={setName} />
+      </div>
       <div
-        className={`fixed top-0 ${isOpen ? 'right-0' : '-right-64'} sidebar h-full overflow-y-auto w-64 bg-gray-800 text-white transition-all duration-300 z-50 md:left-0 md:right-auto md:translate-x-0`}
+        className={`fixed top-0 ${isOpen ? 'right-0' : '-right-64'} border-r border-gray-700 sidebar h-full overflow-y-auto md:w-[30%] lg:w-[30%] xl:!w-[17.5%] w-64 bg-gray-800 text-white !lgBetweenXl_sidebar transition-all duration-300 z-50 md:left-0 md:right-auto md:translate-x-0`}
       >
-        <div className="p-4 font-bold border-b border-gray-700 flex items-center justify-between">
-          <div className="flex flex-col gap-y-2 items-start">
-            <span className="text-lg">گفتگو با هوش مصنوعی</span>
-            <div className="flex items-center gap-x-1">
-              <UserRound className="border-2 border-[var(--primary-color)] rounded-full" size="35px" color="#dddddd" />
-              <span className="text-lg">{name}</span>
-            </div>
-          </div>
+        <div className="font-bold flex items-center md:justify-center justify-between">
+          <Image 
+              src={logo}
+              alt="logo"
+            />
           <button className="md:hidden text-white text-lg" onClick={toggleSidebar}>
             <X size={24} />
           </button>
         </div>
         <ul className="p-4 space-y-4">
-  <li
-    className="relative cursor-pointer flex justify-between items-center hover:text-gray-300"
-    onClick={toggleDropdown}
-  >
-    <span>انتخاب هوش مصنوعی</span>
-    {dropdownOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-  </li>
+        <li
+          className="relative cursor-pointer flex justify-between items-center hover:text-gray-300"
+          onClick={toggleDropdown}
+        >
+          <span>انتخاب هوش مصنوعی</span>
+          {dropdownOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </li>
   {dropdownOpen && (
     <ul className="mt-1 ml-4 space-y-2 bg-gray-500 rounded-md p-2 z-50">
       <li className="p-1 cursor-pointer hover:bg-[var(--primary-color)] flex gap-x-1 items-center rounded">
@@ -215,7 +219,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-
       <div className="flex-1 max-w-[1200px] m-auto text-center min-h-screen flex flex-col justify-between">
         <div>
           <div className="md:hidden p-4 shadow flex justify-between items-center">

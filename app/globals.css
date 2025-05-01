@@ -31,3 +31,23 @@ body {
   background-color: transparent !important;
   color: white !important;
 }
+@media (min-width: 640px) and (max-width: 768px) {
+  .mdBetweenLg{
+    max-width: 100%;
+  }
+}
+@media (min-width: 768px) and (max-width: 1196px) {
+  .mdBetweenLg{
+    max-width: 70% !important;
+  }
+}
+@media (min-width: 1196px) and (max-width: 1280px) {
+  .mdBetweenLg{
+    max-width: 70% !important;
+  }
+}
+@media (min-width: 1280px) and (max-width: 1286px) {
+  .mdBetweenLg{
+    max-width: 82.5% !important;
+  }
+}
