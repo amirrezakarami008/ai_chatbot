@@ -33,6 +33,7 @@ export default function ChatInput({ onButtonClick, chats, setChats, input, setIn
 
     try {
       const response = await chat(1, input, conversationId);
+      console.log(response)
       const aiText = response?.message?.text || 'پاسخ دریافت نشد';
       const newConversationId = response?.message?.conversation_id;
 

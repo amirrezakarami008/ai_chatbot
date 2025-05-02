@@ -32,6 +32,7 @@ export default function Login() {
     setIsLoading(true);
     try {
       const response = await (isLogin ? signin(email, password) : signup(name, email, password));
+      // const response = await fetch('https://jsonplaceholder.typicode.com/posts')
       console.log('پاسخ سرور:', response);
       alert('درخواست ارسال شد');
       if (response.token !== "") {
@@ -43,6 +44,8 @@ export default function Login() {
         console.log("user pass doros ni");
       }
     } catch (error) {
+      console.log(error);
+      
       if (error.message === "USER_EXIST") {
         alert("ایمیل شما قبلا ثبت نام شده است، لطفا وارد شوید.");
       } else if (error.message === "INVALID_CREDENTIALS") {

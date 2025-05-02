@@ -15,7 +15,14 @@ class Encryption {
     }
 
     async encrypt(data) {
+
+        
         const sharedKey = x25519.getSharedSecret(this.privateKey, this.publicKey);
+
+        console.log('کلید ' , sharedKey);
+        console.log('سالت ' , this.getSalt());
+        console.log(data)
+
         const aesKey = await hkdf('sha256', sharedKey, this.getSalt(), 'encryption', 32);
         const iv = crypto.randomBytes(16);
         const cipher = crypto.createCipheriv('aes-256-cbc', aesKey, iv);
