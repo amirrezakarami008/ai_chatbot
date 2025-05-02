@@ -1,5 +1,5 @@
 import { x25519 } from '@noble/curves/ed25519';
-import hkdf from '@panva/hkdf';
+import hkdf from 'futoin-hkdf';
 import crypto from 'crypto';
 import { Config } from './config.js';
 
@@ -15,15 +15,8 @@ class Encryption {
     }
 
     async encrypt(data) {
-
-        
         const sharedKey = x25519.getSharedSecret(this.privateKey, this.publicKey);
-
-        console.log('کلید ' , sharedKey);
-        console.log('سالت ' , this.getSalt());
-        console.log(data)
-
-        const aesKey = await hkdf('sha256', sharedKey, this.getSalt(), 'encryption', 32);
+        const aesKey = await hkdf(sharedKey, 32, {salt: this.getSalt(), info: 'encryption', hash: 'SHA-256'});
         const iv = crypto.randomBytes(16);
         const cipher = crypto.createCipheriv('aes-256-cbc', aesKey, iv);
         let encrypted = Buffer.concat([cipher.update(data, 'utf8'), cipher.final()]);
@@ -32,7 +25,7 @@ class Encryption {
 
     async decrypt(data) {
         const sharedKey = x25519.getSharedSecret(this.privateKey, this.publicKey);
-        const aesKey = await hkdf('sha256', sharedKey, this.getSalt(), 'encryption', 32);
+        const aesKey = await hkdf(sharedKey, 32, {salt: this.getSalt(), info: 'encryption', hash: 'SHA-256'});
         const rawData = Buffer.from(data, 'base64');
         const iv = rawData.slice(0, 16);
         const ciphertext = rawData.slice(16);
