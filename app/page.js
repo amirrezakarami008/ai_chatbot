@@ -8,25 +8,26 @@ import {
   X,
   ChevronDown,
   ChevronUp,
-  Blocks,
   UsersRound,
-  MessageSquareText,
   Headset,
   LogOut,
   History,
   UserRound,
+  Share,
+  Pencil,
 } from 'lucide-react';
 import ChatInput from './components/ChatInput/ChatInput';
-import { chat, get_conversations, get_messages, signup, signin } from '../backend/api.js';
+import { chat, get_conversations, get_messages } from '../backend/api.js';
 import { encryption } from '../backend/encryption.js';
 import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
-import NavbarFix from './components/NavbarFix/NavbarFix';
 import Image from 'next/image';
 import logo from '../public/images/logo.png';
+import Avatar from './components/Avatar/Avatar.jsx';
+import { toast } from 'react-toastify';
 
 const Notification = ({ message, onClose }) => {
   return (
@@ -57,12 +58,12 @@ const Notification = ({ message, onClose }) => {
 const modelIcons = {
   1: (
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
-      <path d="M45.403,25.562c-0.506-1.89-1.518-3.553-2.906-4.862c1.134-2.665,0.963-5.724-0.487-8.237	c-1.391-2.408-3.636-4.131-6.322-4.851c-1.891-0.506-3.839-0.462-5.669,0.088C28.276,5.382,25.562,4,22.647,4	c-4.906,0-9.021,3.416-10.116,7.991c-0.01,0.001-0.019-0.003-0.029-0.002c-2.902,0.36-5.404,2.019-6.865,4.549	c-1.391,2.408-1.76,5.214-1.04,7.9c0.507,1.891,1.519,3.556,2.909,4.865c-1.134,2.666-0.97,5.714,0.484,8.234	c1.391,2.408,3.636,4.131,6.322,4.851c0.896,0.24,1.807,0.359,2.711,0.359c1.003,0,1.995-0.161,2.957-0.45	C21.722,44.619,24.425,46,27.353,46c4.911,0,9.028-3.422,10.12-8.003c2.88-0.35,5.431-2.006,6.891-4.535	C45.754,31.054,46.123,28.248,45.403,25.562z M35.17,9.543c2.171,0.581,3.984,1.974,5.107,3.919c1.049,1.817,1.243,4,0.569,5.967	c-0.099-0.062-0.193-0.131-0.294-0.19l-9.169-5.294c-0.312-0.179-0.698-0.177-1.01,0.006l-10.198,6.041l-0.052-4.607l8.663-5.001	C30.733,9.26,33,8.963,35.17,9.543z M29.737,22.195l0.062,5.504l-4.736,2.805l-4.799-2.699l-0.062-5.504l4.736-2.805L29.737,22.195z M14.235,14.412C14.235,9.773,18.009,6,22.647,6c2.109,0,4.092,0.916,5.458,2.488C28,8.544,27.891,8.591,27.787,8.651l-9.17,5.294	c-0.312,0.181-0.504,0.517-0.5,0.877l0.133,11.851l-4.015-2.258V14.412z M6.528,23.921c-0.581-2.17-0.282-4.438,0.841-6.383	c1.06-1.836,2.823-3.074,4.884-3.474c-0.004,0.116-0.018,0.23-0.018,0.348V25c0,0.361,0.195,0.694,0.51,0.872l10.329,5.81	L19.11,34.03l-8.662-5.002C8.502,27.905,7.11,26.092,6.528,23.921z M14.83,40.457c-2.171-0.581-3.984-1.974-5.107-3.919	c-1.053-1.824-1.249-4.001-0.573-5.97c0.101,0.063,0.196,0.133,0.299,0.193l9.169,5.294c0.154,0.089,0.327,0.134,0.5,0.134	c0.177,0,0.353-0.047,0.51-0.14l10.198-6.041l0.052,4.607l-8.663,5.001C19.269,40.741,17.001,41.04,14.83,40.457z M35.765,35.588	c0,4.639-3.773,8.412-8.412,8.412c-2.119,0-4.094-0.919-5.459-2.494c0.105-0.056,0.216-0.098,0.32-0.158l9.17-5.294	c0.312-0.181,0.504-0.517,0.5-0.877L31.75,23.327l4.015,2.258V35.588z M42.631,32.462c-1.056,1.83-2.84,3.086-4.884,3.483	c0.004-0.12,0.018-0.237,0.018-0.357V25c0-0.361-0.195-0.694-0.51-0.872l-10.329-5.81l3.964-2.348l8.662,5.002	c1.946,1.123,3.338,2.937,3.92,5.107C44.053,28.249,43.754,30.517,42.631,32.462z"></path>
+      <path d="M45.403,25.562c-0.506-1.89-1.518-3.553-2.906-4.862c1.134-2.665,0.963-5.724-0.487-8.237	c-1.391-2.408-3.636-4.131-6.322-4.851c-1.891-0.506-3.839-0.462-5.669,0.088C28.276,5.382,25.562,4,22.647,4	c-4.906,0-9.021,3.416-10.116,7.991c-0.01,0.001-0.019-0.003-0.029-0.002c-2.902,0.36-5.404,2.019-6.865,4.549	c-1.391,2.408-1.76,5.214-1.04,7.9c0.507,1.891,1.519,3.556,2.909,4.865c-1.134,2.666-0.97,5.714,0.484,8.234	c1.391,2.408,3.636,4.131,6.322,4.851c0.896,0.24,1.807,0.359,2.711,0.359c1.003,0,1.995-0.161,2.957-0.45	C21.722,44.619,24.425,46,27.353,46c4.911,0,9.028-3.422,10.12-8.003c2.88-0.35,5.431-2.006,6.891-4.535	C45.754,31.054,46.123,28.248,45.403,25.562z M35.17,9.543c2.171,0.581,3.984,1.974,5.107,3.919c1.049,1.817,1.243,4,0.569,5.967	c-0.099-0.062-0.193-0.131-0.294-0.19l-9.169-5.294c-0.312-0.179-0.698-0.177-1.01,0.006l-10.198,6.041l-0.052-4.607l8.663-5.001	C30.733,9.26,33,8.963,35.17,9.543z M29.737,22.195l0.062,5.504l-4.736,2.805l-4.799-2.699l-0.062-5.504l4.736-2.805L29.737,22.195z M14.235,14.412C14.235,9.773,18.009,6,22.647,6c2.109,0,4.092,0.916,5.458,2.488C28,8.544,27.891,8.591,27.787,8.651l-9.17,5.294	c-0.312,0.181-0.504,0.517-0.5,0.877l0.133,11.851l-4.015-2.258V14.412z M6.528,23.921c-0.581-2.17-0.282-4.438,0.841-6.383	c1.06-1.836,2.823-3.074,4.884-3.474c-0.004,0.116-0.018,0.23-0.018,0.348V25c0,0.361,0.195,0.694,0.51,0.872l10.329,5.81	L19.11,34.03l-8.662-5.002C8.502,27.905,7.11,26.092,6.528,23.921z M14.83,40.457c-2.171-0.581-3.984-1.974-5.107-3.919	c-1.053-1.824-1.249-4.001-0.573-5.97c0.101,0.063,0.196,0.133,0.299,0.193l9.169,5.294c0.154,0.089,0.327,0.134,0.5,0.134	c0.177,0,0.353-0.047,0.51-0.14l10.198-6.041l0.052,4.607l-8.663,5.001C19.269,40.741,17.001,41.04,14.83,40.457z M35.765,35.588	c0,4.639-3.773,8.412-8.412,8.412c-2.119,0-4.094-0.919-5.459-2.494c0.105-0.056,0.216-0.098,0.32-0.158l9.17-5.294	c0.312-0.181,0.504-0.517,0.5-0.877L31.75,23.327l4.015,2.258V35.588z M42.631,32.462c-1.056,1.83-2.84,3.086-4.884,3.483	c0.004-0.120,0.018-0.237,0.018-0.357V25c0-0.361-0.195-0.694-0.51-0.872l-10.329-5.81l3.964-2.348l8.662,5.002	c1.946,1.123,3.338,2.937,3.92,5.107C44.053,28.249,43.754,30.517,42.631,32.462z"></path>
     </svg>
   ),
   2: (
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
-      <path d="M45.403,25.562c-0.506-1.89-1.518-3.553-2.906-4.862c1.134-2.665,0.963-5.724-0.487-8.237	c-1.391-2.408-3.636-4.131-6.322-4.851c-1.891-0.506-3.839-0.462-5.669,0.088C28.276,5.382,25.562,4,22.647,4	c-4.906,0-9.021,3.416-10.116,7.991c-0.01,0.001-0.019-0.003-0.029-0.002c-2.902,0.36-5.404,2.019-6.865,4.549	c-1.391,2.408-1.76,5.214-1.04,7.9c0.507,1.891,1.519,3.556,2.909,4.865c-1.134,2.666-0.97,5.714,0.484,8.234	c1.391,2.408,3.636,4.131,6.322,4.851c0.896,0.24,1.807,0.359,2.711,0.359c1.003,0,1.995-0.161,2.957-0.45	C21.722,44.619,24.425,46,27.353,46c4.911,0,9.028-3.422,10.12-8.003c2.88-0.35,5.431-2.006,6.891-4.535	C45.754,31.054,46.123,28.248,45.403,25.562z M35.17,9.543c2.171,0.581,3.984,1.974,5.107,3.919c1.049,1.817,1.243,4,0.569,5.967	c-0.099-0.062-0.193-0.131-0.294-0.19l-9.169-5.294c-0.312-0.179-0.698-0.177-1.01,0.006l-10.198,6.041l-0.052-4.607l8.663-5.001	C30.733,9.26,33,8.963,35.17,9.543z M29.737,22.195l0.062,5.504l-4.736,2.805l-4.799-2.699l-0.062-5.504l4.736-2.805L29.737,22.195z M14.235,14.412C14.235,9.773,18.009,6,22.647,6c2.109,0,4.092,0.916,5.458,2.488C28,8.544,27.891,8.591,27.787,8.651l-9.17,5.294	c-0.312,0.181-0.504,0.517-0.5,0.877l0.133,11.851l-4.015-2.258V14.412z M6.528,23.921c-0.581-2.17-0.282-4.438,0.841-6.383	c1.06-1.836,2.823-3.074,4.884-3.474c-0.004,0.116-0.018,0.23-0.018,0.348V25c0,0.361,0.195,0.694,0.51,0.872l10.329,5.81	L19.11,34.03l-8.662-5.002C8.502,27.905,7.11,26.092,6.528,23.921z M14.83,40.457c-2.171-0.581-3.984-1.974-5.107-3.919	c-1.053-1.824-1.249-4.001-0.573-5.97c0.101,0.063,0.196,0.133,0.299,0.193l9.169,5.294c0.154,0.089,0.327,0.134,0.5,0.134	c0.177,0,0.353-0.047,0.51-0.14l10.198-6.041l0.052,4.607l-8.663,5.001C19.269,40.741,17.001,41.04,14.83,40.457z M35.765,35.588	c0,4.639-3.773,8.412-8.412,8.412c-2.119,0-4.094-0.919-5.459-2.494c0.105-0.056,0.216-0.098,0.32-0.158l9.17-5.294	c0.312-0.181,0.504-0.517,0.5-0.877L31.75,23.327l4.015,2.258V35.588z M42.631,32.462c-1.056,1.83-2.84,3.086-4.884,3.483	c0.004-0.12,0.018-0.237,0.018-0.357V25c0-0.361-0.195-0.694-0.51-0.872l-10.329-5.81l3.964-2.348l8.662,5.002	c1.946,1.123,3.338,2.937,3.92,5.107C44.053,28.249,43.754,30.517,42.631,32.462z"></path>
+      <path d="M45.403,25.562c-0.506-1.89-1.518-3.553-2.906-4.862c1.134-2.665,0.963-5.724-0.487-8.237	c-1.391-2.408-3.636-4.131-6.322-4.851c-1.891-0.506-3.839-0.462-5.669,0.088C28.276,5.382,25.562,4,22.647,4	c-4.906,0-9.021,3.416-10.116,7.991c-0.01,0.001-0.019-0.003-0.029-0.002c-2.902,0.36-5.404,2.019-6.865,4.549	c-1.391,2.408-1.76,5.214-1.04,7.9c0.507,1.891,1.519,3.556,2.909,4.865c-1.134,2.666-0.97,5.714,0.484,8.234	c1.391,2.408,3.636,4.131,6.322,4.851c0.896,0.24,1.807,0.359,2.711,0.359c1.003,0,1.995-0.161,2.957-0.45	C21.722,44.619,24.425,46,27.353,46c4.911,0,9.028-3.422,10.12-8.003c2.88-0.35,5.431-2.006,6.891-4.535	C45.754,31.054,46.123,28.248,45.403,25.562z M35.17,9.543c2.171,0.581,3.984,1.974,5.107,3.919c1.049,1.817,1.243,4,0.569,5.967	c-0.099-0.062-0.193-0.131-0.294-0.19l-9.169-5.294c-0.312-0.179-0.698-0.177-1.01,0.006l-10.198,6.041l-0.052-4.607l8.663-5.001	C30.733,9.26,33,8.963,35.17,9.543z M29.737,22.195l0.062,5.504l-4.736,2.805l-4.799-2.699l-0.062-5.504l4.736-2.805L29.737,22.195z M14.235,14.412C14.235,9.773,18.009,6,22.647,6c2.109,0,4.092,0.916,5.458,2.488C28,8.544,27.891,8.591,27.787,8.651l-9.17,5.294	c-0.312,0.181-0.504,0.517-0.5,0.877l0.133,11.851l-4.015-2.258V14.412z M6.528,23.921c-0.581-2.17-0.282-4.438,0.841-6.383	c1.06-1.836,2.823-3.074,4.884-3.474c-0.004,0.116-0.018,0.23-0.018,0.348V25c0,0.361,0.195,0.694,0.51,0.872l10.329,5.81	L19.11,34.03l-8.662-5.002C8.502,27.905,7.11,26.092,6.528,23.921z M14.83,40.457c-2.171-0.581-3.984-1.974-5.107-3.919	c-1.053-1.824-1.249-4.001-0.573-5.97c0.101,0.063,0.196,0.133,0.299,0.193l9.169,5.294c0.154,0.089,0.327,0.134,0.5,0.134	c0.177,0,0.353-0.047,0.51-0.14l10.198-6.041l0.052,4.607l-8.663,5.001C19.269,40.741,17.001,41.04,14.83,40.457z M35.765,35.588	c0,4.639-3.773,8.412-8.412,8.412c-2.119,0-4.094-0.919-5.459-2.494c0.105-0.056,0.216-0.098,0.32-0.158l9.17-5.294	c0.312-0.181,0.504-0.517,0.5-0.877L31.75,23.327l4.015,2.258V35.588z M42.631,32.462c-1.056,1.83-2.84,3.086-4.884,3.483	c0.004-0.120,0.018-0.237,0.018-0.357V25c0-0.361-0.195-0.694-0.51-0.872l-10.329-5.81l3.964-2.348l8.662,5.002	c1.946,1.123,3.338,2.937,3.92,5.107C44.053,28.249,43.754,30.517,42.631,32.462z"></path>
     </svg>
   ),
   3: (
@@ -79,12 +80,11 @@ const modelNames = {
 };
 
 const modelBackgrounds = {
-  1: 'bg-gray-800', 
-  2: 'bg-blue-800', 
-  3: 'bg-purple-800', 
+  1: 'bg-gray-800',
+  2: 'bg-blue-800',
+  3: 'bg-purple-800',
 };
 
-// تابع تبدیل زمان به "چند وقت پیش"
 const getTimeAgo = (timeString) => {
   const now = new Date();
   const past = new Date(timeString);
@@ -103,7 +103,6 @@ const getTimeAgo = (timeString) => {
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [showDiv, setShowDiv] = useState(false);
   const [input, setInput] = useState('');
   const [chats, setChats] = useState([]);
   const [token, setToken] = useState(null);
@@ -117,7 +116,7 @@ export default function Home() {
   const [selectedModel, setSelectedModel] = useState(1);
   const [conversationId, setConversationId] = useState(null);
   const messagesEndRef = useRef(null);
-  
+
   const router = useRouter();
 
   const get_history = async () => {
@@ -137,27 +136,16 @@ export default function Home() {
           conversations = [];
         }
 
-        console.log('Processed conversations:', conversations);
-
         const validConversations = conversations.filter(
-          (chat) => chat && (chat.id || chat.title || chat.time) // شل‌تر کردن فیلتر
+          (chat) => chat && (chat.id || chat.title || chat.time)
         );
 
-        console.log('Valid conversations:', validConversations);
-
-        setHistory(validConversations); // فقط تاریخچه رو ست می‌کنیم
-        setChats(validConversations.map(chat => ({
-          ...chat,
-          sender: 'ai',
-          model: selectedModel,
-          time: convertTime(chat.time) // تبدیل زمان تاریخچه
-        })));
+        setHistory(validConversations);
       } else {
         throw new Error('هیچ پاسخی از API دریافت نشد');
       }
     } catch (error) {
-      console.error('خطا در دریافت تاریخچه:', error);
-      addNotification(`خطا در بارگذاری تاریخچه: ${error.message}`);
+      
     } finally {
       setIsLoading(false);
     }
@@ -165,7 +153,7 @@ export default function Home() {
 
   const get_messagess = async () => {
     if (selectedHistoryId) {
-      const response = await get_messages(selectedHistoryId, 20, 1); // اصلاح پارامترها
+      const response = await get_messages(selectedHistoryId, 20, 1);
       return response;
     }
     return null;
@@ -185,7 +173,7 @@ export default function Home() {
               text: msg.text || 'پیام خالی',
               image: msg.image,
               model: msg.model || selectedModel,
-              time: convertTime(msg.time) // تبدیل زمان پیام‌ها
+              time: convertTime(msg.time)
             }));
             setChats(formattedMessages);
           } else {
@@ -207,14 +195,14 @@ export default function Home() {
     if (!timeString) return new Date().toISOString();
     if (typeof timeString === 'string' && !isNaN(timeString)) {
       const timestamp = parseInt(timeString);
-      if (timestamp > 1000000000) { // چک کردن که زمان معقول باشه (بزرگ‌تر از 2001)
+      if (timestamp > 1000000000) {
         return new Date(timestamp * 1000).toISOString();
       } else {
         console.warn('Possible invalid timestamp:', timeString);
-        return new Date().toISOString(); // پیش‌فرض به زمان فعلی
+        return new Date().toISOString();
       }
     }
-    return new Date(timeString).toISOString(); // اگه به فرمت دیگه‌ای باشه، سعی می‌کنه پارس کنه
+    return new Date(timeString).toISOString();
   };
 
   const scrollToBottom = () => {
@@ -227,6 +215,20 @@ export default function Home() {
     setTimeout(() => {
       setNotifications((prev) => prev.filter((n) => n.id !== id));
     }, 10000);
+  };
+
+  const handleCopy = () => {
+    const text = "http://localhost:3000/";
+    navigator.clipboard.writeText(text);
+    toast.success("لینک کپی شد!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeButton: false,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "dark",
+    });
   };
 
   useEffect(() => {
@@ -280,27 +282,86 @@ export default function Home() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleModelSelect = (model) => {
+  const handleModelSelect = async (model) => {
     setSelectedModel(model);
     setChats([]); // پاک کردن چت‌های قبلی
-    setSelectedHistoryId(null); // ریست کردن تاریخچه
-    setConversationId(null); // ریست کردن conversationId
-    addNotification(`مدل به ${modelNames[model]} تغییر کرد`); // اضافه کردن نوتیفیکیشن
+    setSelectedHistoryId(null);
+    setConversationId(null); // ریست کردن conversationId برای ایجاد چت جدید
+    addNotification(`مدل به ${modelNames[model]} تغییر کرد`);
+
+    // ایجاد چت جدید با مدل انتخاب‌شده و ارسال پیام پیش‌فرض
+    try {
+      const defaultMessage = `شروع چت جدید با مدل ${modelNames[model]}`; // پیام پیش‌فرض
+      const response = await chat(model, defaultMessage, null); // فراخوانی API با پیام پیش‌فرض
+      const newConversationId = response?.message?.conversation_id;
+      if (newConversationId) {
+        setConversationId(newConversationId);
+        await get_history(); // به‌روزرسانی تاریخچه
+      } else {
+        throw new Error('شناسه چت جدید دریافت نشد');
+      }
+    } catch (error) {
+      console.error('خطا در ایجاد چت جدید:', error);
+      addNotification(`خطا در ایجاد چت جدید: ${error.message}`);
+    }
   };
 
   return (
     <div className="flex">
-      <div className="navbar-fix z-50">
-        <NavbarFix name={name} setName={setName} />
-      </div>
+      <nav className="hidden md:block fixed top-0 border-b border-gray-700 left-0 right-0 bg-gray-800 mdBetweenLg md:max-w-[82.5%] sm:max-w-[90%] shadow-md z-50">
+        <ul className="flex justify-between items-center p-3">
+          <div className="flex justify-between items-center">
+            <h1>هوشیار: دیدگاهی برای توسعه!</h1>
+          </div>
+          <div className="flex justify-between items-center gap-x-2">
+            <Link href="/" className="flex items-center gap-x-1" title="اشتراک گذاری" onClick={handleCopy}>
+              <li className="rounded-lg p-2.5 border-2 border-gray-700 shadow-lg">
+                <Share size="20px" color="#dddddd" />
+              </li>
+            </Link>
+            <Link href="http://localhost:3000/" target="_blank" className="flex items-center gap-x-1" title="صفحه جدید">
+              <li className="rounded-lg p-2.5 border-2 border-gray-700 shadow-lg">
+                <Pencil size="20px" color="#dddddd" />
+              </li>
+            </Link>
+            <Link href="/" className="rounded-lg p-1 border-2 border-gray-700 shadow-lg" title={`${name} بزرگوار، امیدوارم تجربه لذت بخشی در هوشیار داشته باشی :)`}>
+              <li className="flex items-center gap-x-1">
+                <Avatar name={name} />
+                <span className="text-[12px]">{name}</span>
+              </li>
+            </Link>
+          </div>
+        </ul>
+      </nav>
+
       <div
         className={`fixed top-0 ${isOpen ? 'right-0' : '-right-64'} border-r border-gray-700 sidebar h-full overflow-y-auto md:w-[30%] lg:w-[30%] xl:!w-[17.5%] w-64 bg-gray-800 text-white !lgBetweenXl_sidebar transition-all duration-300 z-50 md:left-0 md:right-auto md:translate-x-0`}
       >
-        <div className="font-bold flex items-center md:justify-center justify-between">
-          <Image src={logo} alt="logo" />
-          <button className="md:hidden text-white text-lg" onClick={toggleSidebar}>
-            <X size={24} />
-          </button>
+        <div className="font-bold flex items-center justify-between p-4">
+          <div className="flex flex-col items-center gap-x-2">
+            <div className="md:hidden flex items-center gap-x-2">
+              <Link href="/" className="flex items-center gap-x-1" title="اشتراک گذاری" onClick={handleCopy}>
+                <span className="rounded-lg p-2.5 border-2 border-gray-700 shadow-lg">
+                  <Share size="20px" color="#dddddd" />
+                </span>
+              </Link>
+              <Link href="http://localhost:3000/" target="_blank" className="flex items-center gap-x-1" title="صفحه جدید">
+                <span className="rounded-lg p-2.5 border-2 border-gray-700 shadow-lg">
+                  <Pencil size="20px" color="#dddddd" />
+                </span>
+              </Link>
+              <Link href="/" className="rounded-lg p-1 border-2 border-gray-700 shadow-lg" title={`${name} بزرگوار، امیدوارم تجربه لذت بخشی در هوشیار داشته باشی :)`}>
+                <span className="flex items-center gap-x-1">
+                  <Avatar name={name} />
+                  <span className="text-[12px]">{name}</span>
+                </span>
+              </Link>
+            </div>
+            <button className="flex text-white text-lg" onClick={toggleSidebar}>
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              <Image src={logo} alt="logo" />
+            </button>
+          </div>
         </div>
         <ul className="p-4 space-y-4">
           <li className="relative cursor-pointer flex justify-between items-center hover:text-gray-300" onClick={toggleDropdown}>
@@ -384,15 +445,16 @@ export default function Home() {
           )}
         </div>
       </div>
+
       <div className="flex-1 max-w-[1200px] m-auto text-center min-h-screen flex flex-col justify-between">
         <div>
-          <div className="md:hidden p-4 shadow flex justify-between items-center">
+          <div className="md:hidden p-4 shadow flex justify-end items-center">
             <button onClick={toggleSidebar}>
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-          <div className="mt-[100px] md:mt-[250px] px-4">
-            <h1 className="text-2xl font-bold mb-4">
+          <div className="mt-[100px] md:mt-[70px] px-4">
+            <h1 className="text-2xl font-bold mt-[100px]">
               در چه <span className="text-[var(--primary-color)]">زمینه</span> ای می‌توانم{' '}
               <span className="text-[var(--primary-color)]">کمک</span> کنم؟
             </h1>
@@ -420,13 +482,13 @@ export default function Home() {
                     <div>
                       {chat.image ? (
                         <>
-                            <Image
-                          src={chat.image}
-                          alt="Generated by هوشیار (تصویرسازی)"
-                          width={500}
-                          height={500}
-                          className="max-w-full h-auto rounded-lg"
-                        />
+                          <Image
+                            src={chat.image}
+                            alt="Generated by هوشیار (تصویرسازی)"
+                            width={500}
+                            height={500}
+                            className="max-w-full h-auto rounded-lg"
+                          />
                           <span>{chat.text}</span>
                         </>
                       ) : (
@@ -464,7 +526,6 @@ export default function Home() {
         </div>
         <div className="overflow-y-auto pb-24">
           <ChatInput
-            onButtonClick={() => setShowDiv(true)}
             chats={chats}
             setChats={setChats}
             input={input}
@@ -474,6 +535,7 @@ export default function Home() {
             isLoading={isLoading}
             setIsLoading={setIsLoading}
             selectedModel={selectedModel}
+            conversationId={conversationId}
             setConversationId={setConversationId}
           />
         </div>

@@ -7,7 +7,6 @@ import { chat } from '../../../backend/api.js';
 import Image from 'next/image';
 
 export default function ChatInput({
-  onButtonClick,
   chats,
   setChats,
   input,
@@ -17,11 +16,11 @@ export default function ChatInput({
   isLoading,
   setIsLoading,
   selectedModel,
+  conversationId,
   setConversationId,
 }) {
   const textareaRef = useRef(null);
   const [error, setError] = useState(null);
-  const [conversationId, setLocalConversationId] = useState(null);
 
   useEffect(() => {
     if (!isTyping && !isLoading) {
@@ -32,7 +31,7 @@ export default function ChatInput({
   useEffect(() => {
     const textarea = textareaRef.current;
     textarea.style.height = 'auto';
-    textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`; // محدود کردن حداکثر ارتفاع
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
   }, [input]);
 
   const handleSend = async () => {
@@ -48,42 +47,37 @@ export default function ChatInput({
       const response = await chat(selectedModel, input, conversationId);
       console.log('Raw response from chat API:', JSON.stringify(response, null, 2));
 
-      // چک کردن اینکه آیا سرور خطایی برگردانده (حتی با استاتوس 200)
       if (response?.error) {
         throw new Error(response.error || 'خطای ناشناخته از سرور');
       }
 
-      // مطمئن شدن که message وجود داره
       if (!response?.message) {
         throw new Error('پاسخ سرور ناقص است: message وجود ندارد');
       }
 
       const newConversationId = response?.message?.conversation_id;
-      if (newConversationId) {
-        setLocalConversationId(newConversationId);
+      if (newConversationId && newConversationId !== conversationId) {
         setConversationId(newConversationId);
       }
 
       setIsLoading(false);
 
-      // تبدیل زمان بک‌اند به ISO
       let responseTime = response?.message?.time;
       if (responseTime && typeof responseTime === 'string' && !isNaN(responseTime)) {
         responseTime = new Date(parseInt(responseTime) * 1000).toISOString();
       } else if (responseTime) {
         console.warn('Unexpected time format from backend:', responseTime);
-        responseTime = new Date().toISOString(); // پیش‌فرض به زمان فعلی
+        responseTime = new Date().toISOString();
       } else {
         responseTime = new Date().toISOString();
       }
 
       if (selectedModel === 3) {
-        const imageUrl = response?.message?.image; // تغییر از image_url به image
-        const errorMessage = response?.message?.text || null; // گرفتن متن سرور به عنوان پیام احتمالی
+        const imageUrl = response?.message?.image;
+        const errorMessage = response?.message?.text || null;
         console.log('Image URL:', imageUrl, 'Error Message:', errorMessage);
 
         if (!imageUrl) {
-          // اگه تصویر وجود نداشت، پیام سرور رو نشون بده (اگه باشه)
           const displayError = errorMessage || 'لینک تصویر دریافت نشد';
           throw new Error(displayError);
         }
@@ -127,11 +121,6 @@ export default function ChatInput({
     handleSend();
   };
 
-  const handleClick = () => {
-    onButtonClick();
-    handleSend();
-  };
-
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 px-4 py-2 bg-gray-900 border-t border-gray-700">
       <form
@@ -143,7 +132,7 @@ export default function ChatInput({
             type="submit"
             title="ارسال"
             className={`text-gray-300 hover:text-white ${isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={handleClick}
+            onClick={handleSend}
             disabled={isTyping || isLoading}
           >
             <IoSend className="w-5 h-5 hover:text-[var(--primary-color)]" />
