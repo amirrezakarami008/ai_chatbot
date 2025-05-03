@@ -154,7 +154,7 @@ export default function ChatInput({
           style={{ minHeight: '40px', maxHeight: '200px', width: '100%' }}
         />
         <div className="flex items-center space-x-reverse mx-2">
-          <button
+          {/* <button
             type="button"
             title="دستیار صوتی"
             className={`me-2 text-gray-300 hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg ${
@@ -163,8 +163,8 @@ export default function ChatInput({
             disabled={isTyping || isLoading}
           >
             <FaMicrophone className="w-5 h-5" />
-          </button>
-          <button
+          </button> */}
+          {/* <button
             type="button"
             title="بارگذاری فایل"
             className={`text-gray-300 hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg ${
@@ -173,7 +173,7 @@ export default function ChatInput({
             disabled={isTyping || isLoading}
           >
             <AiOutlinePlus className="w-5 h-5" />
-          </button>
+          </button> */}
         </div>
         {isLoading && (
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
