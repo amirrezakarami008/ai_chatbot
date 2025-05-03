@@ -46,7 +46,9 @@ export default function ChatInput({
     try {
       const response = await chat(selectedModel, input, conversationId);
       console.log('Raw response from chat API:', JSON.stringify(response, null, 2));
-
+      if(response == 'CONTENT_POLICY'){
+        alert('کص نگو')
+      }
       if (response?.error) {
         throw new Error(response.error || 'خطای ناشناخته از سرور');
       }
@@ -96,16 +98,13 @@ export default function ChatInput({
         });
       }
     } catch (error) {
-      console.error('Error in handleSend:', error);
       setIsLoading(false);
-      let errorMessage = error.message || 'خطا در ارتباط با هوش مصنوعی. لطفاً دوباره تلاش کنید.';
-      if (error.message.includes('input too long')) {
-        errorMessage = 'ورودی شما بسیار طولانی است. لطفاً با پشتیبانی تماس بگیرید.';
+      if (error.message == 'CONTENT_POLICY') {
+        alert('پیام شما نامناسب هست');
       } else if (error.message.includes('network')) {
         errorMessage = 'مشکل ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید.';
       }
-      setError(errorMessage);
-      setChats((prev) => [...prev, { sender: 'ai', text: errorMessage, model: selectedModel, time: new Date().toISOString() }]);
+      setChats((prev) => [...prev, { sender: 'ai', model: selectedModel, time: new Date().toISOString() }]);
     }
   };
 
