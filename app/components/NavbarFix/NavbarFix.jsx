@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { UserRound , Pencil , Share} from "lucide-react";
 import Avatar from "../Avatar/Avatar.jsx"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import Modal from "../Modal/Modal.jsx";
 import { toast } from "react-toastify";
 
 export default function NavbarFix({name , setName}) {
-  // const currentURL = window.location.href;
-  const currentURL = "http://localhost:3000/";
+  const [currentURL, setCurrentURL] = useState('');
+
+  useEffect(() => {
+    setCurrentURL(window.location.href);
+  }, []);
   const [showModal, setShowModal] = useState(false);
   const [copyText, setCopyText] = useState("");
   const handleCopy = () => {

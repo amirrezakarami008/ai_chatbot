@@ -68,7 +68,7 @@ const modelIcons = {
   ),
   3: (
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
-      <path d="M 10 4 C 13.148438 4.960938 16.300781 5.921875 19.445313 6.890625 C 19.441406 14.664063 19.453125 22.4375 19.441406 30.210938 C 16.382813 32.917969 13.339844 35.644531 10.289063 38.363281 C 17.746094 34.445313 25.199219 30.519531 32.65625 26.59375 C 30.585938 25.652344 28.515625 24.726563 26.445313 23.78125 C 25.054688 20.746094 23.652344 17.71875 22.257813 14.683594 C 29.171875 16.796875 36.085938 18.917969 43 21.039063 C 43 24.417969 43 27.796875 43 31.175781 C 35.132813 35.867188 27.257813 40.550781 19.390625 45.242188 C 16.261719 43.050781 13.132813 40.855469 10 38.664063 C 10 27.109375 10 15.554688 10 4 M 10 2 C 9.574219 2 9.15625 2.136719 8.808594 2.394531 C 8.300781 2.769531 8 3.367188 8 4 L 8 38.660156 C 8 39.316406 8.316406 39.925781 8.851563 40.300781 C 10.980469 41.789063 13.109375 43.28125 15.234375 44.773438 L 18.242188 46.882813 C 18.585938 47.121094 18.984375 47.242188 19.390625 47.242188 C 19.742188 47.242188 20.097656 47.148438 20.414063 46.960938 C 24.761719 44.367188 29.109375 41.777344 33.460938 39.1875 L 44.023438 32.894531 C 44.628906 32.535156 45 31.882813 45 31.175781 L 45 26.109375 L 44.996094 21.039063 C 44.996094 20.160156 44.425781 19.386719 43.585938 19.128906 L 39 Robbins003906 17.722656 C 33.617188 16.070313 28.226563 14.417969 22.839844 12.773438 C 22.644531 12.714844 22.449219 12.6875 22.253906 12.6875 C 21.972656 12.6875 21.699219 12.746094 21.445313 12.855469 C 21.445313 10.867188 21.445313 8.882813 21.445313 6.894531 C 21.445313 6.015625 20.875 5.242188 20.035156 4.980469 C 16.886719 4.011719 13.734375 3.046875 10.582031 2.089844 C 10.390625 2.027344 10.195313 2 10 2 Z M 21.441406 30.238281 C 21.441406 30.230469 21.441406 30.222656 21.441406 30.210938 C 21.445313 26.046875 21.445313 21.878906 21.445313 17.710938 C 21.695313 18.246094 21.941406 18.785156 22.191406 19.320313 C 23.003906 21.085938 23.816406 22.851563 24.628906 24.617188 C 24.828125 25.054688 25.179688 25.40625 25.617188 25.605469 C 26.445313 25.980469 27.273438 26.355469 28.101563 26.730469 L 26.457031 27.597656 C 24.785156 28.476563 23.113281 29.359375 21.441406 30.238281 Z"></path>
+      <path d="M 10 4 C 13.148438 4.960938 16.300781 5.921875 19.445313 6.890625 C 19.441406 14.664063 19.453125 22.4375 19.441406 30.210938 C 16.382813 32.917969 13.339844 35.644531 10.289063 38.363281 C 17.746094 34.445313 25.199219 30.519531 32.656250 26.593750 C 30.585938 25.652344 28.515625 24.726563 26.445313 23.781250 C 25.054688 20.746094 23.652344 17.718750 22.257813 14.683594 C 29.171875 16.796875 36.085938 18.917969 43 21.039063 C 43 24.417969 43 27.796875 43 31.175781 C 35.132813 35.867188 27.257813 40.550781 19.390625 45.242188 C 16.261719 43.050781 13.132813 40.855469 10 38.664063 C 10 27.109375 10 15.554688 10 4 M 10 2 C 9.574219 2 9.156250 2.136719 8.808594 2.394531 C 8.300781 2.769531 8 3.367188 8 4 L 8 38.660156 C 8 39.316406 8.316406 39.925781 8.851563 40.300781 C 10.980469 41.789063 13.109375 43.281250 15.234375 44.773438 L 18.242188 46.882813 C 18.585938 47.121094 18.984375 47.242188 19.390625 47.242188 C 19.742188 47.242188 20.097656 47.148438 20.414063 46.960938 C 24.761719 44.367188 29.109375 41.777344 33.460938 39.187500 L 44.023438 32.894531 C 44.628906 32.535156 45 31.882813 45 31.175781 L 45 26.109375 L 44.996094 21.039063 C 44.996094 20.160156 44.425781 19.386719 43.585938 19.128906 L 39 Robbins003906 17.722656 C 33.617188 16.070313 28.226563 14.417969 22.839844 12.773438 C 22.644531 12.714844 22.449219 12.687500 22.253906 12.687500 C 21.972656 12.687500 21.699219 12.746094 21.445313 12.855469 C 21.445313 10.867188 21.445313 8.882813 21.445313 6.894531 C 21.445313 6.015625 20.875000 5.242188 20.035156 4.980469 C 16.886719 4.011719 13.734375 3.046875 10.582031 2.089844 C 10.390625 2.027344 10.195313 2 10 2 Z M 21.441406 30.238281 C 21.441406 30.230469 21.441406 30.222656 21.441406 30.210938 C 21.445313 26.046875 21.445313 21.878906 21.445313 17.710938 C 21.695313 18.246094 21.941406 18.785156 22.191406 19.320313 C 23.003906 21.085938 23.816406 22.851563 24.628906 24.617188 C 24.828125 25.054688 25.179688 25.406250 25.617188 25.605469 C 26.445313 25.980469 27.273438 26.355469 28.101563 26.730469 L 26.457031 27.597656 C 24.785156 28.476563 23.113281 29.359375 21.441406 30.238281 Z"></path>
     </svg>
   ),
 };
@@ -82,7 +82,7 @@ const modelNames = {
 const modelBackgrounds = {
   1: 'bg-gray-800',
   2: 'bg-blue-800',
-  3: 'bg-purple-800',
+  3: 'bg-green-800', // تغییر به سبز برای هماهنگی با چمن (اختیاری)
 };
 
 const getTimeAgo = (timeString) => {
@@ -322,14 +322,14 @@ export default function Home() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex bg-[url('https://example.com/grass-background.jpg')] bg-cover bg-center min-h-screen">
       <nav className="hidden md:block fixed top-0 border-b border-gray-700 left-0 right-0 bg-gray-800 mdBetweenLg md:max-w-[82.5%] sm:max-w-[90%] shadow-md z-50">
         <ul className="flex justify-between items-center p-3">
           <div className="flex justify-between items-center">
             <h1>هوشیار: دیدگاهی برای توسعه!</h1>
           </div>
           <div className="flex justify-between items-center gap-x-2">
-            <Link href="/" className="flex items-center gap-x-1" title="اشتراک گذاری" onClick={handleCopy}>
+            <Link href="/" className="flex items-center gap-x-1" title="اشتراک‌گذاری" onClick={handleCopy}>
               <li className="rounded-lg p-2.5 border-2 border-gray-700 shadow-lg">
                 <Share size="20px" color="#dddddd" />
               </li>
@@ -339,7 +339,7 @@ export default function Home() {
                 <Pencil size="20px" color="#dddddd" />
               </li>
             </Link>
-            <Link href="/" className="rounded-lg p-1 border-2 border-gray-700 shadow-lg" title={`${name} بزرگوار، امیدوارم تجربه لذت بخشی در هوشیار داشته باشی :)`}>
+            <Link href="/" className="rounded-lg p-1 border-2 border-gray-700 shadow-lg" title={`${name} بزرگوار، امیدوارم تجربه لذت‌بخشی در هوشیار داشته باشی :)`}>
               <li className="flex items-center gap-x-1">
                 <Avatar name={name} />
                 <span className="text-[12px]">{name}</span>
@@ -355,7 +355,7 @@ export default function Home() {
         <div className="font-bold flex items-center justify-between p-4">
           <div className="flex flex-col items-center gap-x-2">
             <div className="md:hidden flex items-center gap-x-2">
-              <Link href="/" className="flex items-center gap-x-1" title="اشتراک گذاری" onClick={handleCopy}>
+              <Link href="/" className="flex items-center gap-x-1" title="اشتراک‌گذاری" onClick={handleCopy}>
                 <span className="rounded-lg p-2.5 border-2 border-gray-700 shadow-lg">
                   <Share size="20px" color="#dddddd" />
                 </span>
@@ -365,7 +365,7 @@ export default function Home() {
                   <Pencil size="20px" color="#dddddd" />
                 </span>
               </Link>
-              <Link href="/" className="rounded-lg p-1 border-2 border-gray-700 shadow-lg" title={`${name} بزرگوار، امیدوارم تجربه لذت بخشی در هوشیار داشته باشی :)`}>
+              <Link href="/" className="rounded-lg p-1 border-2 border-gray-700 shadow-lg" title={`${name} بزرگوار، امیدوارم تجربه لذت‌بخشی در هوشیار داشته باشی :)`}>
                 <span className="flex items-center gap-x-1">
                   <Avatar name={name} />
                   <span className="text-[12px]">{name}</span>
@@ -397,14 +397,14 @@ export default function Home() {
                 onClick={() => handleModelSelect(2)}
               >
                 {modelIcons[2]}
-                هوشیار (برنامه نویسی)
+                هوشیار (برنامه‌نویسی)
               </li>
               <li
                 className="p-1 cursor-pointer hover:bg-[var(--primary-color)] flex gap-x-1 items-center rounded"
                 onClick={() => handleModelSelect(3)}
               >
                 {modelIcons[3]}
-                هوشیار (تصویر سازی)
+                هوشیار (تصویرسازی)
               </li>
             </ul>
           )}
@@ -473,7 +473,7 @@ export default function Home() {
               در چه <span className="text-[var(--primary-color)]">زمینه</span> ای می‌توانم{' '}
               <span className="text-[var(--primary-color)]">کمک</span> کنم؟
             </h1>
-            <div className="chat-container overflow-y-auto p-[10px]">
+            <div className="chat-container overflow-y-auto p-[10px] max-h-[calc(100vh-200px)] bg-[url('https://example.com/grass-background.jpg')] bg-cover bg-center">
               {chats
                 .concat(
                   isTyping && selectedModel !== 3
@@ -487,9 +487,9 @@ export default function Home() {
                     className={`message m-[10px] p-[10px] max-w-[70%] rounded-lg flex items-start gap-x-2 ${
                       chat.sender === 'user'
                         ? 'user-message bg-[#007bff] text-white ml-auto text-right'
-                        : `ai-message ${modelBackgrounds[chat.model || selectedModel]} my-5 text-base/8 px-4 text-right text-white`
+                        : 'ai-message bg-transparent text-base/8 px-4 text-right text-white'
                     }`}
-                    style={{ display: 'block', width: 'fit-content' }}
+                    style={{ display: 'block', width: 'fit-content', maxWidth: '100%', overflowX: 'auto', minHeight: '50px' }}
                   >
                     {chat.sender !== 'user' && (
                       <span className="mt-1">{modelIcons[chat.model || selectedModel]}</span>
@@ -501,30 +501,40 @@ export default function Home() {
                           alt="Generated by هوشیار (تصویرسازی)"
                           width={500}
                           height={500}
-                          className="max-w-full h-auto rounded-lg mb-2"
+                          className="max-w-full h-auto rounded-lg mb-2 object-cover"
                         />
                       )}
                       {chat.text && chat.text.trim() !== '' && (
                         <ReactMarkdown
                           rehypePlugins={[rehypeRaw, rehypeHighlight]}
                           components={{
-                            code({ node, inline, className, children, ...props }) {
-                              return inline ? (
-                                <code className={className} {...props}>
-                                  {children}
-                                </code>
-                              ) : (
-                                <pre
-                                  className="text-white p-4 rounded-lg my-5 overflow-x-auto"
-                                  style={{ backgroundColor: '#202020', color: 'white', textAlign: 'left', maxWidth: '100%' }}
-                                >
-                                  <code className={className} {...props}>
-                                    {children}
-                                  </code>
-                                </pre>
-                              );
+                            p({ children }) {
+                              return <div className="mb-4">{children}</div>;
                             },
+                            code({ node, inline, className, children, ...props }) {
+                              if (inline) {
+                                return <code className={className} {...props}>{children}</code>;
+                              } else {
+                                return (
+                                  <pre
+                                    className="text-white p-4 rounded-lg my-5 overflow-x-auto"
+                                    style={{ backgroundColor: '#202020', color: 'white', textAlign: 'left', maxWidth: '100%', whiteSpace: 'pre-wrap' }}
+                                  >
+                                    <code className={className} {...props}>
+                                      {children}
+                                    </code>
+                                  </pre>
+                                );
+                              }
+                            },
+                            // مدیریت تگ‌های ناشناخته
+                            [Symbol.iterator]: () => ({
+                              next() {
+                                return { done: true };
+                              },
+                            }),
                           }}
+                          skipHtml={true} // غیرفعال کردن رندر مستقیم تگ‌های HTML
                         >
                           {chat.text}
                         </ReactMarkdown>
@@ -569,6 +579,10 @@ export default function Home() {
             50% {
               opacity: 0;
             }
+          }
+          .chat-container {
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
           }
         `}</style>
       </div>

@@ -46,8 +46,8 @@ export default function ChatInput({
     try {
       const response = await chat(selectedModel, input, conversationId);
       console.log('Raw response from chat API:', JSON.stringify(response, null, 2));
-      if(response == 'CONTENT_POLICY'){
-        alert('کص نگو')
+      if (response === 'CONTENT_POLICY') {
+        alert('کص نگو');
       }
       if (response?.error) {
         throw new Error(response.error || 'خطای ناشناخته از سرور');
@@ -76,8 +76,9 @@ export default function ChatInput({
 
       if (selectedModel === 3) {
         const imageUrl = response?.message?.image;
-        const errorMessage = response?.message?.text || null;
-        console.log('Image URL:', imageUrl, 'Error Message:', errorMessage);
+        const responseText = response?.message?.text || null;
+        const errorMessage = responseText || null; // استفاده از text به‌عنوان پیام اصلی یا خطا
+        console.log('Image URL:', imageUrl, 'Response Text:', responseText, 'Error Message:', errorMessage);
 
         if (!imageUrl) {
           const displayError = errorMessage || 'لینک تصویر دریافت نشد';
@@ -86,7 +87,10 @@ export default function ChatInput({
 
         setChats((prev) => {
           const updatedChats = prev.filter((chat) => chat.sender !== 'ai-typing');
-          return [...updatedChats, { sender: 'ai', image: imageUrl, model: selectedModel, time: responseTime }];
+          return [
+            ...updatedChats,
+            { sender: 'ai', image: imageUrl, text: responseText || errorMessage, model: selectedModel, time: responseTime },
+          ];
         });
       } else {
         const aiText = response?.message?.text || 'پاسخ دریافت نشد';
@@ -99,12 +103,17 @@ export default function ChatInput({
       }
     } catch (error) {
       setIsLoading(false);
-      if (error.message == 'CONTENT_POLICY') {
+      if (error.message === 'CONTENT_POLICY') {
         alert('پیام شما نامناسب هست');
       } else if (error.message.includes('network')) {
-        errorMessage = 'مشکل ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید.';
+        setError('مشکل ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید.');
+      } else {
+        setError(error.message);
+        setChats((prev) => [
+          ...prev,
+          { sender: 'ai', text: error.message, model: selectedModel, time: new Date().toISOString() },
+        ]);
       }
-      setChats((prev) => [...prev, { sender: 'ai', model: selectedModel, time: new Date().toISOString() }]);
     }
   };
 
