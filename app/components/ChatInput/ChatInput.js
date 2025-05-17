@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { FaMicrophone } from 'react-icons/fa';
-import { IoSend } from 'react-icons/io5';
+import { IoSend, IoClose } from 'react-icons/io5';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { chat } from '../../../backend/api.js';
 import Image from 'next/image';
@@ -13,6 +13,7 @@ export default function ChatInput({
   setInput,
   typeWriter,
   isTyping,
+  stopTyping,
   isLoading,
   setIsLoading,
   selectedModel,
@@ -21,10 +22,12 @@ export default function ChatInput({
 }) {
   const textareaRef = useRef(null);
   const [error, setError] = useState(null);
+  const [isStopMode, setIsStopMode] = useState(false);
 
   useEffect(() => {
     if (!isTyping && !isLoading) {
       textareaRef.current?.focus();
+      setIsStopMode(false);
     }
   }, [isTyping, isLoading]);
 
@@ -42,6 +45,7 @@ export default function ChatInput({
     setInput('');
     setError(null);
     setIsLoading(true);
+    setIsStopMode(true);
 
     try {
       const response = await chat(selectedModel, input, conversationId);
@@ -77,7 +81,7 @@ export default function ChatInput({
       if (selectedModel === 3) {
         const imageUrl = response?.message?.image;
         const responseText = response?.message?.text || null;
-        const errorMessage = responseText || null; // استفاده از text به‌عنوان پیام اصلی یا خطا
+        const errorMessage = responseText || null;
         console.log('Image URL:', imageUrl, 'Response Text:', responseText, 'Error Message:', errorMessage);
 
         if (!imageUrl) {
@@ -103,6 +107,7 @@ export default function ChatInput({
       }
     } catch (error) {
       setIsLoading(false);
+      setIsStopMode(false);
       if (error.message === 'CONTENT_POLICY') {
         alert('پیام شما نامناسب هست');
       } else if (error.message.includes('network')) {
@@ -117,6 +122,12 @@ export default function ChatInput({
     }
   };
 
+  const handleStop = () => {
+    stopTyping();
+    setIsStopMode(false);
+    setChats((prev) => prev.filter((chat) => chat.sender !== 'ai-typing'));
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -126,7 +137,11 @@ export default function ChatInput({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleSend();
+    if (isStopMode) {
+      handleStop();
+    } else {
+      handleSend();
+    }
   };
 
   return (
@@ -138,12 +153,16 @@ export default function ChatInput({
         <div className="flex items-center space-x-3 me-3 space-x-reverse">
           <button
             type="submit"
-            title="ارسال"
+            title={isStopMode ? 'توقف' : 'ارسال'}
             className={`text-gray-300 hover:text-white ${isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={handleSend}
-            disabled={isTyping || isLoading}
+            onClick={isStopMode ? handleStop : handleSend}
+            disabled={isLoading}
           >
-            <IoSend className="w-5 h-5 hover:text-[var(--primary-color)]" />
+            {isStopMode ? (
+              <IoClose size={'20px'} className="w-5 h-5 text-black hover:text-[var(--primary-color)] bg-white rounded-full" />
+            ) : (
+              <IoSend  className="w-5 h-5 hover:text-[var(--primary-color)]" />
+            )}
           </button>
         </div>
         <textarea
@@ -162,26 +181,7 @@ export default function ChatInput({
           style={{ minHeight: '40px', maxHeight: '200px', width: '100%' }}
         />
         <div className="flex items-center space-x-reverse mx-2">
-          {/* <button
-            type="button"
-            title="دستیار صوتی"
-            className={`me-2 text-gray-300 hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg ${
-              isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-            disabled={isTyping || isLoading}
-          >
-            <FaMicrophone className="w-5 h-5" />
-          </button> */}
-          {/* <button
-            type="button"
-            title="بارگذاری فایل"
-            className={`text-gray-300 hover:text-[var(--primary-color)] bg-gray-700 p-2 rounded-lg ${
-              isTyping || isLoading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-            disabled={isTyping || isLoading}
-          >
-            <AiOutlinePlus className="w-5 h-5" />
-          </button> */}
+          {/* دکمه‌های غیرفعال‌شده */}
         </div>
         {isLoading && (
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2">

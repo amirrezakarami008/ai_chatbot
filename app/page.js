@@ -82,7 +82,7 @@ const modelNames = {
 const modelBackgrounds = {
   1: 'bg-gray-800',
   2: 'bg-blue-800',
-  3: 'bg-green-800', // تغییر به سبز برای هماهنگی با چمن (اختیاری)
+  3: 'bg-green-800',
 };
 
 const getTimeAgo = (timeString) => {
@@ -116,6 +116,7 @@ export default function Home() {
   const [selectedModel, setSelectedModel] = useState(1);
   const [conversationId, setConversationId] = useState(null);
   const messagesEndRef = useRef(null);
+  const typingIntervalRef = useRef(null);
 
   const router = useRouter();
 
@@ -178,7 +179,6 @@ export default function Home() {
             }));
             setChats(formattedMessages);
 
-            // به‌روزرسانی selectedModel بر اساس مدل اولین پیام AI (یا اولین پیام اگر هیچ پیام AI وجود نداشت)
             const firstAIMessage = formattedMessages.find((msg) => msg.sender === 'ai');
             const firstMessageWithModel = formattedMessages.find((msg) => msg.model);
             if (firstAIMessage && firstAIMessage.model) {
@@ -186,10 +186,9 @@ export default function Home() {
             } else if (firstMessageWithModel && firstMessageWithModel.model) {
               setSelectedModel(firstMessageWithModel.model);
             } else {
-              setSelectedModel(1); // مدل پیش‌فرض در صورتی که مدل مشخص نشده باشد
+              setSelectedModel(1);
             }
 
-            // به‌روزرسانی conversationId
             setConversationId(selectedHistoryId);
           } else {
             throw new Error('فرمت داده‌های دریافتی نامعتبر است');
@@ -268,16 +267,26 @@ export default function Home() {
     setIsTyping(true);
     setTypingText('');
 
-    const interval = setInterval(() => {
+    typingIntervalRef.current = setInterval(() => {
       if (index < text.length) {
         setTypingText((prev) => prev + text[index]);
         index++;
       } else {
-        clearInterval(interval);
+        clearInterval(typingIntervalRef.current);
+        typingIntervalRef.current = null;
         setIsTyping(false);
         onComplete(text);
       }
     }, 12);
+  };
+
+  const stopTyping = () => {
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current);
+      typingIntervalRef.current = null;
+      setIsTyping(false);
+      setTypingText('');
+    }
   };
 
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -299,19 +308,18 @@ export default function Home() {
 
   const handleModelSelect = async (model) => {
     setSelectedModel(model);
-    setChats([]); // پاک کردن چت‌های قبلی
+    setChats([]);
     setSelectedHistoryId(null);
-    setConversationId(null); // ریست کردن conversationId برای ایجاد چت جدید
+    setConversationId(null);
     addNotification(`مدل به ${modelNames[model]} تغییر کرد`);
 
-    // ایجاد چت جدید با مدل انتخاب‌شده و ارسال پیام پیش‌فرض
     try {
-      const defaultMessage = `شروع چت جدید با مدل ${modelNames[model]}`; // پیام پیش‌فرض
-      const response = await chat(model, defaultMessage, null); // فراخوانی API با پیام پیش‌فرض
+      const defaultMessage = `شروع چت جدید با مدل ${modelNames[model]}`;
+      const response = await chat(model, defaultMessage, null);
       const newConversationId = response?.message?.conversation_id;
       if (newConversationId) {
         setConversationId(newConversationId);
-        await get_history(); // به‌روزرسانی تاریخچه
+        await get_history();
       } else {
         throw new Error('شناسه چت جدید دریافت نشد');
       }
@@ -484,7 +492,7 @@ export default function Home() {
                 .map((chat, index) => (
                   <div
                     key={index}
-                    className={`message m-[10px] p-[10px] max-w-[70%] rounded-lg flex items-start gap-x-2 ${
+                    className={`message m-[10px] p-[10px] rounded-lg flex items-start gap-x-2 ${
                       chat.sender === 'user'
                         ? 'user-message bg-[#007bff] text-white ml-auto text-right'
                         : 'ai-message bg-transparent text-base/8 px-4 text-right text-white'
@@ -527,14 +535,13 @@ export default function Home() {
                                 );
                               }
                             },
-                            // مدیریت تگ‌های ناشناخته
                             [Symbol.iterator]: () => ({
                               next() {
                                 return { done: true };
                               },
                             }),
                           }}
-                          skipHtml={true} // غیرفعال کردن رندر مستقیم تگ‌های HTML
+                          skipHtml={true}
                         >
                           {chat.text}
                         </ReactMarkdown>
@@ -555,6 +562,7 @@ export default function Home() {
             setInput={setInput}
             typeWriter={typeWriter}
             isTyping={isTyping}
+            stopTyping={stopTyping}
             isLoading={isLoading}
             setIsLoading={setIsLoading}
             selectedModel={selectedModel}
