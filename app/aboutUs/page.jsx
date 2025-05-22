@@ -1,8 +1,8 @@
 import sharafi from "../../public/images/amirhossein-sharafi.jpg";
 import karami from "../../public/images/amirreza-karami.jpg";
 import ganji from "../../public/images/ali-ganjizade.png";
-import Card from "../components/Card/Card";
-import FixedSidebar from "../components/Fixed-Sidebar/FixedSidebar";
+import Card from "@/components/Card/Card";
+import FixedSidebar from "@/components/Fixed-Sidebar/FixedSidebar";
 
 export default function aboutUs() {
   const data = [

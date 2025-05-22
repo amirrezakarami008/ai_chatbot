@@ -1,10 +1,7 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
-import { BotMessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation"; 
-import { chat, get_conversations, get_messages, signup, signin } from '../../backend/api.js';
-
+import { signup, signin } from '../../backend/api.js';
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
@@ -36,7 +33,7 @@ export default function Login() {
         setToken(response.token);
         localStorage.setItem("token", response.token);
         localStorage.setItem("name", response.user.name);
-        router.push("/");
+        router.push("/chat");
       } else {
         console.log("user pass doros ni");
       }
@@ -56,8 +53,8 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[var(--secondary-color)]">
-      <div className="p-8 rounded-2xl shadow-2xl bg-[var(--secondary-color)] border border-[var(--primary-color)] w-full max-w-md">
+    <div className="flex items-center justify-center min-h-screen bg-[url('https://www.jowhareh.com/images/Jowhareh/galleries_9/medium_b37f183a-6380-4290-bcd7-908d991c0730.webp')] bg-cover bg-center">
+      <div className="p-8 rounded-2xl shadow-2xl bg-[var(--secondary-color)] w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
           {isLogin ? "ورود به حساب" : "ایجاد حساب کاربری"}
         </h2>
@@ -131,14 +128,6 @@ export default function Login() {
               {isLogin ? "ثبت نام کن" : "وارد شو"}
             </button>
           </div>
-          <Link href="/">
-            <button
-              className="flex items-center justify-center gap-x-2 w-full border border-[var(--primary-color)] cursor-pointer text-white rounded-lg p-3 hover:bg-[var(--primary-color)] transition-all"
-            >
-              <BotMessageSquare color="#fff" />
-              گفتگو با هوش مصنوعی
-            </button>
-          </Link>
         </div>
       </div>
     </div>

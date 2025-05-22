@@ -8,7 +8,7 @@
 }
 body {
   color: white !important;
-  background-color: var(--primary-color);
+  background-color: #1E293A;
   font-family: "vazir";
 }
 @font-face {
@@ -50,4 +50,7 @@ body {
   .mdBetweenLg{
     max-width: 82.5% !important;
   }
+}
+.direction{
+  direction: ltr;
 }
