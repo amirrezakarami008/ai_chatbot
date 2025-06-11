@@ -161,7 +161,7 @@ export default function ChatInput({
             {isStopMode ? (
               <IoClose size={'20px'} className="w-5 h-5 text-black hover:text-[var(--primary-color)] bg-white rounded-full" />
             ) : (
-              <IoSend  className="w-5 h-5 hover:text-[var(--primary-color)]" />
+              <IoSend className="w-5 h-5 hover:text-[var(--primary-color)]" />
             )}
           </button>
         </div>
