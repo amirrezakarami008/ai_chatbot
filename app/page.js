@@ -368,7 +368,6 @@ export default function Home() {
               </Link>
             </div>
             <button className="flex text-white text-lg" onClick={toggleSidebar}>
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
               <Image src={logo} alt="logo" />
             </button>
           </div>
